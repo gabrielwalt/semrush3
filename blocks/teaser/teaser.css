@@ -1,4 +1,29 @@
+/* light variant: brand pastel gradient panel + decorative pattern */
+.teaser {
+  border-radius: var(--radius-m);
+  overflow: hidden;
+  background-color: #f4f1ff;
+  background-image: url('/icons/semrush-one-bg.svg');
+  background-repeat: no-repeat;
+  background-position: center right;
+  background-size: cover;
+}
+
+/* the block's single row → two columns: text | media */
+.teaser > div {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+  align-items: center;
+  padding: var(--space-xl);
+}
+
 .teaser > div > div {
+  width: 100%;
+}
+
+/* text column */
+.teaser > div > div:first-child {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -12,27 +37,47 @@
 
 .teaser p {
   margin: 0;
-  max-width: 32ch;
+  max-width: 36ch;
 }
 
-.teaser .button-wrapper,
 .teaser p:has(.button) {
   margin: 0;
 }
 
-/* dark variant — self-painted dark card (stays dark on any surface) */
+/* media column */
+.teaser > div > div:last-child img,
+.teaser > div > div:last-child .teaser-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-s);
+}
+
+@media (width >= 1024px) {
+  .teaser > div {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-2xl);
+    padding: var(--space-2xl);
+    min-height: 540px;
+  }
+
+  .teaser > div > div {
+    flex: 1;
+  }
+}
+
+/* dark variant — black panel + enterprise background, white text */
 .teaser.teaser-dark {
   background-color: var(--color-dark-surface);
+  background-image: url('/icons/enterprise-bg.webp');
   color: var(--color-inverse);
-  border-radius: var(--radius-m);
-  padding: var(--space-xl);
 }
 
 .teaser.teaser-dark h2 {
   color: var(--color-inverse);
 }
 
-/* the dark card's outline CTA inverts to white */
 .teaser.teaser-dark a.button.secondary {
   border-color: var(--color-inverse);
   color: var(--color-inverse);

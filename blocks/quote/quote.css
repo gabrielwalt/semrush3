@@ -1,0 +1,90 @@
+.quote .quote-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
+/* dark quote card */
+.quote .quote-card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-xl);
+  border-radius: var(--radius-m);
+  background-color: var(--color-dark-surface);
+  color: var(--color-inverse);
+}
+
+.quote .quote-logo {
+  margin: 0 0 var(--space-l);
+}
+
+.quote .quote-logo img {
+  height: 28px;
+  width: auto;
+}
+
+.quote .quote-card blockquote {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-heading-s);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.4;
+}
+
+.quote .quote-card blockquote::before {
+  content: '“';
+  color: var(--color-accent);
+  margin-right: 0.1em;
+}
+
+.quote .quote-author {
+  margin: var(--space-l) 0 0;
+  font-size: var(--font-size-body-m);
+}
+
+.quote .quote-author strong {
+  display: block;
+  font-weight: var(--font-weight-semibold);
+}
+
+/* light highlight-stat card */
+.quote .quote-stat {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-xl);
+  border-radius: var(--radius-m);
+  background-color: var(--color-surface);
+}
+
+.quote .quote-stat-number {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-heading-xl);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-heading);
+}
+
+.quote .quote-stat-label {
+  margin: var(--space-s) 0 0;
+  font-size: var(--font-size-body-l);
+}
+
+@media (width >= 1024px) {
+  .quote .quote-layout {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .quote .quote-card {
+    flex: 2;
+  }
+
+  .quote .quote-stat {
+    flex: 1;
+    justify-content: space-between;
+  }
+
+  .quote .quote-stat-number {
+    font-size: 64px;
+  }
+}

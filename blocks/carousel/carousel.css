@@ -1,0 +1,113 @@
+/* section clips so cards bleed past the right edge */
+.carousel-container {
+  overflow: hidden;
+}
+
+/* left-align first card to the content column; cards bleed past the right edge */
+.carousel .carousel-track {
+  display: flex;
+  gap: var(--space-2xs);
+  margin-left: max(var(--content-padding), calc((100vw - var(--content-width)) / 2));
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  scroll-padding-left: 0;
+}
+
+.carousel .carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel .carousel-card {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 320px;
+  min-height: 460px;
+  padding: var(--space-s);
+  border-radius: var(--radius-s);
+  background-color: #dceeeb;
+  scroll-snap-align: start;
+}
+
+.carousel .carousel-card:last-child {
+  margin-right: var(--content-padding);
+}
+
+.carousel .carousel-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+/* eyebrow (small label) */
+.carousel .carousel-card-body h3 {
+  margin: 0;
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* card headline */
+.carousel .carousel-card-body p {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-heading-s);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-heading);
+}
+
+.carousel .carousel-card-media {
+  margin-top: auto;
+}
+
+.carousel .carousel-card-media img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (width >= 1024px) {
+  .carousel .carousel-card {
+    width: 430px;
+    min-height: 500px;
+  }
+}
+
+/* nav arrows in the section header */
+.carousel-nav {
+  display: flex;
+  gap: var(--space-2xs);
+  margin-top: var(--space-m);
+}
+
+.carousel-nav-btn {
+  width: 48px;
+  height: 48px;
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center;
+  cursor: pointer;
+  transition: background-color var(--transition-fast), opacity var(--transition-fast);
+}
+
+.carousel-nav-prev {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23181e15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>');
+}
+
+.carousel-nav-next {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%23181e15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>');
+}
+
+.carousel-nav-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.carousel-nav-btn:hover:not(:disabled) {
+  background-color: var(--color-surface);
+}

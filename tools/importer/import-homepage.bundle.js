@@ -97,28 +97,19 @@ var CustomImportScript = (() => {
     const heading = element.querySelector("h2, h3");
     const body = element.querySelector("p");
     const link = element.querySelector("a[href]");
+    const video = element.querySelector("video");
     const img = element.querySelector("img");
-    const cell = document.createElement("div");
-    if (img) {
-      const src = abs2(img.getAttribute("src"));
-      if (src && src !== "about:error") {
-        const pic = document.createElement("picture");
-        const el = document.createElement("img");
-        el.src = src;
-        el.alt = img.getAttribute("alt") || "";
-        pic.appendChild(el);
-        cell.appendChild(pic);
-      }
-    }
+    const poster = video && video.getAttribute("poster") || img && img.getAttribute("src");
+    const textCell = document.createElement("div");
     if (heading) {
       const h = document.createElement("h2");
       h.textContent = heading.textContent.trim();
-      cell.appendChild(h);
+      textCell.appendChild(h);
     }
     if (body) {
       const p = document.createElement("p");
       p.textContent = body.textContent.trim();
-      cell.appendChild(p);
+      textCell.appendChild(p);
     }
     if (link) {
       const p = document.createElement("p");
@@ -128,9 +119,28 @@ var CustomImportScript = (() => {
       a.textContent = link.textContent.trim();
       em.appendChild(a);
       p.appendChild(em);
-      cell.appendChild(p);
+      textCell.appendChild(p);
     }
-    const table = WebImporter.DOMUtils.createTable([["Teaser"], [cell]], document);
+    const mediaCell = document.createElement("div");
+    const videoUrl = "https://www.semrush.com/static/videos/semrush_one.mp4";
+    const vp = document.createElement("p");
+    const va = document.createElement("a");
+    va.href = "/static/videos/semrush_one-mp4";
+    va.textContent = videoUrl;
+    vp.appendChild(va);
+    mediaCell.appendChild(vp);
+    const src = abs2(poster);
+    if (src && src !== "about:error") {
+      const pp = document.createElement("p");
+      const pic = document.createElement("picture");
+      const el = document.createElement("img");
+      el.src = src;
+      el.alt = heading ? heading.textContent.trim() : "";
+      pic.appendChild(el);
+      pp.appendChild(pic);
+      mediaCell.appendChild(pp);
+    }
+    const table = WebImporter.DOMUtils.createTable([["Teaser"], [textCell, mediaCell]], document);
     wrapper.appendChild(table);
     element.replaceWith(wrapper);
   }
@@ -147,28 +157,19 @@ var CustomImportScript = (() => {
     const heading = element.querySelector("h2, h3");
     const body = element.querySelector("p");
     const link = element.querySelector("a[href]");
+    const video = element.querySelector("video");
     const img = element.querySelector("img");
-    const cell = document.createElement("div");
-    if (img) {
-      const src = abs3(img.getAttribute("src"));
-      if (src && src !== "about:error") {
-        const pic = document.createElement("picture");
-        const el = document.createElement("img");
-        el.src = src;
-        el.alt = img.getAttribute("alt") || "";
-        pic.appendChild(el);
-        cell.appendChild(pic);
-      }
-    }
+    const poster = video && video.getAttribute("poster") || img && img.getAttribute("src");
+    const textCell = document.createElement("div");
     if (heading) {
       const h = document.createElement("h2");
       h.textContent = heading.textContent.trim();
-      cell.appendChild(h);
+      textCell.appendChild(h);
     }
     if (body) {
       const p = document.createElement("p");
       p.textContent = body.textContent.trim();
-      cell.appendChild(p);
+      textCell.appendChild(p);
     }
     if (link) {
       const p = document.createElement("p");
@@ -178,9 +179,28 @@ var CustomImportScript = (() => {
       a.textContent = link.textContent.trim();
       em.appendChild(a);
       p.appendChild(em);
-      cell.appendChild(p);
+      textCell.appendChild(p);
     }
-    const table = WebImporter.DOMUtils.createTable([["Teaser (teaser-dark)"], [cell]], document);
+    const mediaCell = document.createElement("div");
+    const videoUrl = "https://www.semrush.com/static/videos/enterprise_video.mp4";
+    const vp = document.createElement("p");
+    const va = document.createElement("a");
+    va.href = "/static/videos/enterprise_video-mp4";
+    va.textContent = videoUrl;
+    vp.appendChild(va);
+    mediaCell.appendChild(vp);
+    const src = abs3(poster);
+    if (src && src !== "about:error") {
+      const pp = document.createElement("p");
+      const pic = document.createElement("picture");
+      const el = document.createElement("img");
+      el.src = src;
+      el.alt = heading ? heading.textContent.trim() : "";
+      pic.appendChild(el);
+      pp.appendChild(pic);
+      mediaCell.appendChild(pp);
+    }
+    const table = WebImporter.DOMUtils.createTable([["Teaser (teaser-dark)"], [textCell, mediaCell]], document);
     wrapper.appendChild(table);
     element.replaceWith(wrapper);
   }

@@ -53,6 +53,7 @@
   --color-brand-hover: #5733b0;
   --color-accent: #c190ff;
   --color-accent-hover: #b07cf5;
+  --color-accent-green: #18f0bf;
   --color-dark-surface: #181e15;
   --color-inverse: #fff;
 
@@ -399,21 +400,6 @@ main > .section.hero > .default-content-wrapper {
 
 main > .section.hero h1 {
   margin-bottom: var(--space-s);
-}
-
-/* section style: promo-pair — two teasers side by side */
-@media (width >= 1024px) {
-  main > .section.promo-pair {
-    display: flex;
-    gap: var(--space-xl);
-    align-items: stretch;
-  }
-
-  main > .section.promo-pair > .teaser-wrapper {
-    flex: 1;
-    margin-top: 0;
-    max-width: calc(50% - (var(--space-xl) / 2));
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

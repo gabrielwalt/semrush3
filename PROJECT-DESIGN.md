@@ -54,6 +54,7 @@ Token groups in `styles/styles.css` `:root`: fonts, font-weights, heading sizes 
 - **Background:** `#FFF`; **surface** `#F4F4F2`; **border** `#E3E4E8`.
 - **Brand (links/primary actions):** `#6A40D0` purple (6.45:1, distinct from ink per the Distinct-Link Rule); hover `#5733B0`.
 - **Accent:** lavender `#C190FF` — used as a **button fill with ink text** (7.04:1), decorative only (fails as text on white, so never used as text color); hover `#B07CF5`.
+- **Accent green:** `#18F0BF` — decorative only (the stats arrow-panel gradient pairs it with the lavender accent). Never used as text.
 - **Dark surface:** `#181E15` (= ink) with inverse `#FFF` text; links invert to the lavender accent.
 
 ## Buttons (foundation rule)

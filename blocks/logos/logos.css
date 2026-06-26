@@ -1,27 +1,58 @@
-.logos .logos-list {
+.logos {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+.logos .logos-track {
   display: flex;
-  flex-wrap: wrap;
+  width: max-content;
+  animation: logos-scroll 40s linear infinite;
+}
+
+.logos .logos-group {
+  display: flex;
+  flex-shrink: 0;
   align-items: center;
-  justify-content: center;
-  gap: var(--space-s) var(--space-l);
+  gap: var(--space-2xl);
   margin: 0;
-  padding: 0;
+  padding: 0 var(--space-xl) 0 0;
   list-style: none;
 }
 
-.logos .logos-list li {
+.logos .logos-group li {
   display: flex;
   align-items: center;
   margin: 0;
 }
 
-.logos .logos-list img {
+.logos .logos-group img {
   height: 32px;
   width: auto;
 }
 
 @media (width >= 1024px) {
-  .logos .logos-list img {
+  .logos .logos-group img {
     height: 40px;
+  }
+}
+
+@keyframes logos-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.logos:hover .logos-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logos .logos-track {
+    animation: none;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .logos .logos-group[aria-hidden="true"] {
+    display: none;
   }
 }

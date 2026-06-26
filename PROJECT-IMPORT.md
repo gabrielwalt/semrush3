@@ -29,6 +29,14 @@ Header promo banner, nav, and footer are site **chrome** — handled by nav/foot
 
 Detection cascade per `marker-driven-import`: section wrappers from the source `.mp-*` region classes → block detection by region role/heading → default content (eyebrow = small-text-before-heading, CTA = emphasized link).
 
+### Teaser videos (autoplay)
+
+The promo teasers carry autoplaying product videos. The source `<video>` lazy-loads its `<source>` (empty until scrolled in), so the URLs are hardcoded in the parsers (verified live):
+- semrush-one: `https://www.semrush.com/static/videos/semrush_one.mp4`
+- enterprise: `https://www.semrush.com/static/videos/enterprise_video.mp4`
+
+Per `video-in-eds`, parsers emit a LINK — relative href slug (`/static/videos/<name>-mp4`, same-origin proxy) + full URL as link text — plus the poster `<picture>` as a fallback frame. `blocks/teaser/teaser.js` finds the video link (matches `.mp4|.webm` in link *text*, not the CTA), builds a muted/loop/playsinline `<video>`, and plays it via IntersectionObserver (reduced-motion → poster only).
+
 ## Template-to-Parser Mapping
 
 Single template (homepage) → single parser.
