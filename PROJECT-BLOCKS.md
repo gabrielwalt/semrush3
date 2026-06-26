@@ -37,10 +37,12 @@ Block + variant + section-style inventory; one-off registry.
 | `footer` | Final CTA band ("Get started…" + Start free trial accent pill) + 4 link columns + social + legal rows | `content/footer.plain.html` | ✅ styled |
 | `footer-cta`, `footer-columns`, `footer-social`, `footer-legal` | No-op stub blocks — structural wrappers in the footer fragment styled by footer.css; stubs exist only to silence EDS block-load 404s | — | ✅ stubs |
 
-**Header/footer simplifications (Refined fidelity — revisit if needed):**
-- The lavender **promo banner** above the nav ("TRY SEMRUSH ONE FOR FREE") is omitted.
-- **Products** and **Resources** are plain links, not mega-menu dropdowns (the stock nav supports dropdowns if we author nested `<ul>`s later).
-- nav/footer fragment paths are wired via `<meta name="nav">` / `<meta name="footer">` in `head.html` (site-wide), pointing at `/content/nav` and `/content/footer`.
+**Header detail (all closed at GATE 2):**
+- Lavender **promo banner** above the nav ("TRY SEMRUSH ONE FOR FREE…") — 4th nav-fragment section, hoisted by header.js to `.nav-promo-banner`.
+- **Products** and **Resources** are mega-menu dropdowns (nested `<ul>` in the nav fragment → stock `.nav-drop` toggle); Pricing/Enterprise are plain links.
+- nav/footer fragment paths wired via `<meta name="nav">` / `<meta name="footer">` in `head.html` (site-wide) → `/content/nav`, `/content/footer`.
+
+**Remaining Refined-fidelity note:** stats numbers render at 112px (vs source 180px) — capped to avoid clipping long values (e.g. 289M+); user-confirmed to keep.
 
 ## One-offs
 

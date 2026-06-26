@@ -124,6 +124,16 @@ export default async function decorate(block) {
   nav.id = 'nav';
   while (fragment.firstElementChild) nav.append(fragment.firstElementChild);
 
+  // Optional promo banner is the 4th section — pull it out before mapping the rest.
+  const bannerSection = nav.children[3];
+  let banner;
+  if (bannerSection) {
+    banner = document.createElement('div');
+    banner.className = 'nav-promo-banner';
+    while (bannerSection.firstElementChild) banner.append(bannerSection.firstElementChild);
+    bannerSection.remove();
+  }
+
   const classes = ['brand', 'sections', 'tools'];
   classes.forEach((c, i) => {
     const section = nav.children[i];
@@ -166,6 +176,7 @@ export default async function decorate(block) {
 
   const navWrapper = document.createElement('div');
   navWrapper.className = 'nav-wrapper';
+  if (banner) navWrapper.prepend(banner);
   navWrapper.append(nav);
   block.append(navWrapper);
 }

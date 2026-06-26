@@ -404,6 +404,21 @@ var CustomImportScript = (() => {
     if (url.startsWith("/")) return `https://www.semrush.com${url}`;
     return url;
   }
+  var TAG_MAP = [
+    [/Adobe Brand Visibility/i, "News \xB7 Product Update"],
+    [/AI Search Operating System/i, "News \xB7 Playbook"],
+    [/Partnership with Lovable/i, "News \xB7 Product Update"],
+    [/Adobe Completes Semrush/i, "News"],
+    [/FAQ for Customers/i, "News"],
+    [/ChatGPT/i, "News \xB7 Product Update"],
+    [/Driving LLM Visibility/i, "Blog \xB7 Article"],
+    [/Free Webinars/i, "Academy Course"],
+    [/Center Stage/i, "Spotlight"]
+  ];
+  function tagsForTitle(title) {
+    const match = TAG_MAP.find(([re]) => re.test(title));
+    return match ? match[1] : "";
+  }
   function parse8(element, { document }) {
     const wrapper = document.createElement("div");
     const h2 = element.querySelector("h2");
@@ -452,7 +467,8 @@ var CustomImportScript = (() => {
         p.textContent = desc.textContent.trim();
         textCell.appendChild(p);
       }
-      const tagText = [...tags].map((t) => t.textContent.trim()).filter(Boolean).join(" \xB7 ");
+      const liveTagText = [...tags].map((t) => t.textContent.trim()).filter(Boolean).join(" \xB7 ");
+      const tagText = liveTagText || (titleLink ? tagsForTitle(titleLink.textContent.trim()) : "");
       if (tagText) {
         const p = document.createElement("p");
         p.textContent = tagText;

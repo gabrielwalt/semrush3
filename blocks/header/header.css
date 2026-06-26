@@ -316,3 +316,21 @@ header nav .nav-tools .button-wrapper a.button:any-link {
   background-color: var(--color-dark-surface);
   color: var(--color-inverse);
 }
+
+/* promo banner — lavender bar above the nav */
+header .nav-wrapper .nav-promo-banner {
+  background-color: var(--color-accent);
+  text-align: center;
+}
+
+header .nav-wrapper .nav-promo-banner p {
+  margin: 0;
+  padding: var(--space-2xs) var(--space-s);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-body-s);
+  font-weight: var(--font-weight-semibold);
+}
+
+header .nav-wrapper .nav-promo-banner a:any-link {
+  color: var(--color-ink);
+}

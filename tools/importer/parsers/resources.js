@@ -8,6 +8,25 @@ function abs(url) {
   return url;
 }
 
+// Article category tags are injected by client JS and don't survive the headless
+// import, so map them by a title keyword (verified live 2026-06-26).
+const TAG_MAP = [
+  [/Adobe Brand Visibility/i, 'News · Product Update'],
+  [/AI Search Operating System/i, 'News · Playbook'],
+  [/Partnership with Lovable/i, 'News · Product Update'],
+  [/Adobe Completes Semrush/i, 'News'],
+  [/FAQ for Customers/i, 'News'],
+  [/ChatGPT/i, 'News · Product Update'],
+  [/Driving LLM Visibility/i, 'Blog · Article'],
+  [/Free Webinars/i, 'Academy Course'],
+  [/Center Stage/i, 'Spotlight'],
+];
+
+function tagsForTitle(title) {
+  const match = TAG_MAP.find(([re]) => re.test(title));
+  return match ? match[1] : '';
+}
+
 export default function parse(element, { document }) {
   const wrapper = document.createElement('div');
   const h2 = element.querySelector('h2');
@@ -62,7 +81,8 @@ export default function parse(element, { document }) {
       p.textContent = desc.textContent.trim();
       textCell.appendChild(p);
     }
-    const tagText = [...tags].map((t) => t.textContent.trim()).filter(Boolean).join(' · ');
+    const liveTagText = [...tags].map((t) => t.textContent.trim()).filter(Boolean).join(' · ');
+    const tagText = liveTagText || (titleLink ? tagsForTitle(titleLink.textContent.trim()) : '');
     if (tagText) {
       const p = document.createElement('p');
       p.textContent = tagText;
