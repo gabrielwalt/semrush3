@@ -3,9 +3,9 @@
 ## Current Focus
 
 - Branch: main
-- Active task: T-002 — build the global style foundation from the live homepage
-- Last completed: T-001 — migration-orientation (strategy recorded in PROJECT-DESIGN.md)
-- Next up: T-003 — import homepage content
+- Active task: T-003 — import homepage content (DA `.plain.html`)
+- Last completed: T-002 — global style foundation (tokens, type/color/spacing, fonts; detect.mjs 0 errors)
+- Next up: T-004 — style the homepage block by block (GATE 2)
 - Blocker: none
 
 ## Pages

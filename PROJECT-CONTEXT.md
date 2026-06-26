@@ -12,7 +12,7 @@ The project's wiki — durable, cross-cutting knowledge that fits no other PROJE
 
 ## Brand
 
-*[Agent: record brand facts here as they surface.]*
+- **Buttons must never use pure black** (`#000` / `rgb(0,0,0)`). Design-team rule (stated 2026-06-26 by gabrielwalt). Use a brand color (purple accent) or an off-black token for button backgrounds/text — never pure black. Applies to all CTA/button styling across blocks.
 
 ## Stakeholders
 
