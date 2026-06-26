@@ -1,8 +1,8 @@
 /* header and nav layout */
 header .nav-wrapper {
-  background-color: var(--background-color);
+  background-color: var(--color-bg);
   width: 100%;
-  z-index: 2;
+  z-index: var(--z-sticky);
   position: fixed;
 }
 
@@ -13,12 +13,12 @@ header nav {
     'hamburger brand tools' var(--nav-height)
     'sections sections sections' 1fr / auto 1fr auto;
   align-items: center;
-  gap: 0 24px;
+  gap: 0 var(--space-s);
   margin: auto;
-  max-width: 1248px;
+  max-width: var(--content-width);
   height: var(--nav-height);
-  padding: 0 24px;
-  font-family: var(--body-font-family);
+  padding: 0 var(--content-padding);
+  font-family: var(--font-body);
 }
 
 header nav[aria-expanded='true'] {
@@ -30,7 +30,7 @@ header nav[aria-expanded='true'] {
   min-height: 100dvh;
 }
 
-@media (width >= 900px) {
+@media (width >= 1024px) {
   header .nav-wrapper {
     position: relative;
   }
@@ -38,9 +38,9 @@ header nav[aria-expanded='true'] {
   header nav {
     display: flex;
     justify-content: space-between;
-    gap: 0 32px;
-    max-width: 1264px;
-    padding: 0 32px;
+    gap: 0 var(--space-m);
+    max-width: var(--content-width);
+    padding: 0 var(--content-padding);
   }
 
   header nav[aria-expanded='true'] {
@@ -72,7 +72,7 @@ header nav .nav-hamburger button {
   border: 0;
   border-radius: 0;
   padding: 0;
-  background-color: var(--background-color);
+  background-color: transparent;
   color: inherit;
   overflow: initial;
   text-overflow: initial;
@@ -132,7 +132,7 @@ header nav[aria-expanded='true'] .nav-hamburger-icon::after {
   transform: rotate(-45deg);
 }
 
-@media (width >= 900px) {
+@media (width >= 1024px) {
   header nav .nav-hamburger {
     display: none;
     visibility: hidden;
@@ -142,15 +142,24 @@ header nav[aria-expanded='true'] .nav-hamburger-icon::after {
 /* brand */
 header .nav-brand {
   grid-area: brand;
-  flex-basis: 128px;
-  font-size: var(--heading-font-size-s);
-  font-weight: 700;
   line-height: 1;
 }
 
-header nav .nav-brand img {
-  width: 128px;
-  height: auto;
+/* logo via icon span; hide the "Semrush" text label */
+header nav .nav-brand a {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0;
+}
+
+header nav .nav-brand .icon-semrush-logo {
+  width: 150px;
+  height: 36px;
+}
+
+header nav .nav-brand .icon-semrush-logo img {
+  width: 150px;
+  height: 36px;
 }
 
 /* sections */
@@ -170,11 +179,12 @@ header nav[aria-expanded='true'] .nav-sections {
 header nav .nav-sections ul {
   list-style: none;
   padding-left: 0;
-  font-size: var(--body-font-size-s);
+  font-size: var(--font-size-body-m);
 }
 
 header nav .nav-sections ul > li {
-  font-weight: 500;
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-semibold);
 }
 
 header nav .nav-sections ul > li > ul {
@@ -185,7 +195,7 @@ header nav .nav-sections ul > li > ul > li {
   font-weight: 400;
 }
 
-@media (width >= 900px) {
+@media (width >= 1024px) {
   header nav .nav-sections {
     display: block;
     visibility: visible;
@@ -224,7 +234,7 @@ header nav .nav-sections ul > li > ul > li {
 
   header nav .nav-sections ul {
     display: flex;
-    gap: 24px;
+    gap: var(--space-s);
     margin: 0;
   }
 
@@ -244,8 +254,8 @@ header nav .nav-sections ul > li > ul > li {
     left: -24px;
     width: 200px;
     top: 150%;
-    padding: 16px;
-    background-color: var(--light-color);
+    padding: var(--space-xs);
+    background-color: var(--color-surface);
     white-space: initial;
   }
 
@@ -258,15 +268,51 @@ header nav .nav-sections ul > li > ul > li {
     height: 0;
     border-left: 8px solid transparent;
     border-right: 8px solid transparent;
-    border-bottom: 8px solid var(--light-color);
+    border-bottom: 8px solid var(--color-surface);
   }
 
   header nav .nav-sections .default-content-wrapper > ul > li > ul > li {
-    padding: 8px 0;
+    padding: var(--space-2xs) 0;
   }
 }
 
 /* tools */
 header nav .nav-tools {
   grid-area: tools;
+}
+
+header nav .nav-tools .default-content-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+}
+
+header nav .nav-tools p {
+  margin: 0;
+}
+
+/* Both tools links share the pill shape; Log In is the outline default. */
+header nav .nav-tools a:any-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 var(--space-s);
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-heading);
+  font-size: var(--font-size-body-m);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+header nav .nav-tools a:hover {
+  text-decoration: none;
+}
+
+/* Sign Up — ink fill pill (authored as <strong><a> → .button.primary in a .button-wrapper) */
+header nav .nav-tools .button-wrapper a.button:any-link {
+  border-color: var(--color-dark-surface);
+  background-color: var(--color-dark-surface);
+  color: var(--color-inverse);
 }

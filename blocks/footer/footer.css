@@ -1,20 +1,110 @@
 footer {
-  background-color: var(--light-color);
-  font-size: var(--body-font-size-xs);
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+  font-size: var(--font-size-body-m);
 }
 
 footer .footer > div {
   margin: auto;
-  max-width: 1200px;
-  padding: 40px 24px 24px;
+  max-width: var(--content-width);
+  padding: var(--space-l) var(--content-padding);
 }
 
 footer .footer p {
   margin: 0;
 }
 
-@media (width >= 900px) {
-  footer .footer > div {
-    padding: 40px 32px 24px;
+/* final CTA band */
+footer .footer-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-s);
+  padding: var(--space-2xl) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+footer .footer-cta h2 {
+  margin: 0;
+  font-size: var(--font-size-heading-xl);
+}
+
+footer .footer-cta p {
+  font-size: var(--font-size-body-l);
+}
+
+/* Start free trial — lavender accent pill (authored as <strong><a> → .button.primary) */
+footer .footer-cta .button-container a.button {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent);
+  color: var(--color-ink);
+}
+
+/* link columns */
+footer .footer-columns {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-l);
+}
+
+footer .footer-columns p strong {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-body-m);
+  font-weight: var(--font-weight-semibold);
+}
+
+footer .footer-columns ul {
+  list-style: none;
+  margin: var(--space-s) 0 var(--space-l);
+  padding: 0;
+}
+
+footer .footer-columns li {
+  margin-top: var(--space-2xs);
+}
+
+footer .footer-columns a:any-link {
+  color: var(--color-ink-muted);
+}
+
+footer .footer-columns a:hover {
+  color: var(--color-brand);
+}
+
+/* social + legal rows */
+footer .footer-social {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-l);
+}
+
+footer .footer-social ul,
+footer .footer-legal ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-s);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+footer .footer-social a:any-link,
+footer .footer-legal a:any-link {
+  color: var(--color-ink-muted);
+}
+
+footer .footer-social p {
+  color: var(--color-ink-muted);
+}
+
+@media (width >= 1024px) {
+  footer .footer-columns {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  footer .footer-cta h2 {
+    font-size: var(--font-size-heading-xl);
   }
 }

@@ -29,6 +29,19 @@ Block + variant + section-style inventory; one-off registry.
 | `light` | Surface-tint background | `styles/styles.css` | (foundation, unused yet) |
 | `flush` | Full-bleed (zero section padding) | `styles/styles.css` | (foundation, unused yet) |
 
+## Chrome (header / footer)
+
+| Block | Purpose | Content fragment | Status |
+|-------|---------|------------------|--------|
+| `header` | Sticky top nav: Semrush logo + nav links (Products/Pricing/Resources/Enterprise) + Log In (outline pill) / Sign Up (ink pill). Stock EDS nav JS; restyled to brand. | `content/nav.plain.html` | ✅ styled |
+| `footer` | Final CTA band ("Get started…" + Start free trial accent pill) + 4 link columns + social + legal rows | `content/footer.plain.html` | ✅ styled |
+| `footer-cta`, `footer-columns`, `footer-social`, `footer-legal` | No-op stub blocks — structural wrappers in the footer fragment styled by footer.css; stubs exist only to silence EDS block-load 404s | — | ✅ stubs |
+
+**Header/footer simplifications (Refined fidelity — revisit if needed):**
+- The lavender **promo banner** above the nav ("TRY SEMRUSH ONE FOR FREE") is omitted.
+- **Products** and **Resources** are plain links, not mega-menu dropdowns (the stock nav supports dropdowns if we author nested `<ul>`s later).
+- nav/footer fragment paths are wired via `<meta name="nav">` / `<meta name="footer">` in `head.html` (site-wide), pointing at `/content/nav` and `/content/footer`.
+
 ## One-offs
 
 *[Agent: record one-off registrations here.]*
