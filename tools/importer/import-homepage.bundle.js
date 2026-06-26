@@ -424,7 +424,8 @@ var CustomImportScript = (() => {
       const img = article.querySelector("img");
       const titleLink = article.querySelector("h3 a, a[href]");
       const desc = article.querySelector("p");
-      const tags = article.querySelectorAll('[class*="tag"]');
+      const tagWrap = article.querySelector('footer, [class*="info"], [class*="tag"]');
+      const tags = tagWrap ? [...tagWrap.querySelectorAll("*")].filter((el) => !el.children.length && el.textContent.trim()) : [];
       const imgCell = document.createElement("div");
       if (img) {
         const src = abs7(img.getAttribute("src"));

@@ -18,7 +18,7 @@ Block + variant + section-style inventory; one-off registry.
 | Variant | Base block | Purpose | Status |
 |---------|-----------|---------|--------|
 | `teaser-dark` | `teaser` | Self-painted dark card (black panel + enterprise-bg.webp, white text/CTA) — the Enterprise promo | ✅ styled |
-| `carousel-articles` | `carousel` | Article cards (title link + description + tags) for Resources | 🔲 not styled |
+| `carousel-articles` | `carousel` | Resources article cards: transparent, image-on-top (3:2), title link + muted description (+ tags row when present) | ✅ styled |
 
 ## Section Styles
 

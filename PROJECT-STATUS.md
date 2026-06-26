@@ -4,8 +4,9 @@
 
 - Branch: main
 - Active task: T-004 — styling homepage blocks (GATE 2); hero done, next is logos/teaser
-- Last completed: teaser videos (autoplay), Solutions carousel, stats band, customer quote all styled
-- Next up: Resources carousel-articles variant + final CTA; then nav + footer; GATE 2 full-page critique
+- Last completed: Resources carousel-articles variant styled; final CTA assigned to footer migration
+- Next up: header/nav + footer migration (footer includes the final CTA band); then GATE 2 full-page critique
+- Note: homepage body blocks all styled (hero, logos, teasers+video, solutions carousel, stats, quote, resources)
 - Blocker: none
 
 ## Pages

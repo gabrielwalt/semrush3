@@ -29,7 +29,12 @@ export default function parse(element, { document }) {
     const img = article.querySelector('img');
     const titleLink = article.querySelector('h3 a, a[href]');
     const desc = article.querySelector('p');
-    const tags = article.querySelectorAll('[class*="tag"]');
+    // Tags live in the article's trailing footer/info wrapper (e.g. "News",
+    // "Product Update") as leaf elements — not always class-tagged.
+    const tagWrap = article.querySelector('footer, [class*="info"], [class*="tag"]');
+    const tags = tagWrap
+      ? [...tagWrap.querySelectorAll('*')].filter((el) => !el.children.length && el.textContent.trim())
+      : [];
 
     const imgCell = document.createElement('div');
     if (img) {
