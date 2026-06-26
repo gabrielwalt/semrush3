@@ -18,7 +18,12 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { JSDOM } from '/home/node/.excat-marketplace/excat/skills/excat-content-import/scripts/node_modules/jsdom/lib/api.js';
 
-const BLOCK_CLASSES = ['insights-form', 'logos', 'teaser', 'carousel', 'stats', 'quote'];
+const BLOCK_CLASSES = [
+  // homepage
+  'insights-form', 'logos', 'teaser', 'carousel', 'stats', 'quote',
+  // pricing
+  'pricing-nav', 'pricing-plans', 'comparison-table', 'addons', 'accordion',
+];
 
 function isBlock(el) {
   return el.tagName === 'DIV'

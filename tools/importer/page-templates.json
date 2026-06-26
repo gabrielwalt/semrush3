@@ -16,6 +16,21 @@
         { "name": "quote", "instances": [".mp-section.mp-client-testimonials"] },
         { "name": "resources", "instances": [".mp-section.mp-resources"] }
       ]
+    },
+    {
+      "name": "pricing",
+      "description": "Semrush pricing page (SEO Classic): toolkit sidebar, plan cards, comparison table, add-ons, enterprise teaser, FAQ accordion, testimonials slider. Parsers key on structural/semantic markers (CSS-module classes are build-hashed).",
+      "urls": [
+        "https://www.semrush.com/pricing/seo/"
+      ],
+      "blocks": [
+        { "name": "pricing-nav", "instances": ["[aria-label=\"sidebar navigation\"]"] },
+        { "name": "pricing-plans", "instances": ["main h1"] },
+        { "name": "comparison-table", "instances": ["[role=\"grid\"]"] },
+        { "name": "addons", "instances": ["[role=\"region\"]"] },
+        { "name": "accordion", "instances": ["[role=\"region\"]"] },
+        { "name": "quotes", "instances": ["[role=\"region\"]"] }
+      ]
     }
   ]
 }

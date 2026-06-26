@@ -120,6 +120,8 @@ The *positive method* for building each foundation dimension well, from impeccab
 | [marker-driven-import](marker-driven-import/SKILL.md) | User validated a page's content; designing ONE generic marker-driven parser; adding detection for a new block/variant/section-style/template; import doesn't reproduce validated content |
 | [importer-parser-patterns](importer-parser-patterns/SKILL.md) | Writing a block parser; parser validation failing; content structure questions (low-level table/DOM mechanics) |
 | [importer-diff-workflow](importer-diff-workflow/SKILL.md) | After a parser/import change — diffing a re-imported page against its remote reference to catch content loss; `marker-driven-import` says "diff against reference" and you need the bash tooling |
+| [import-lazy-hydrated-content](import-lazy-hydrated-content/SKILL.md) | Source content is in the live DOM but missing from imported `.plain.html` (video sources, carousel tags, SPA grids); parser hook validation passes but bulk import drops it — client JS injects it after parse time |
+| [post-import-sectionizer](post-import-sectionizer/SKILL.md) | Imported page renders as ONE section; `<hr>` section breaks vanish from `.plain.html`; Section Metadata style class won't apply — html2md flattened the section boundaries |
 | [eds-migration-process](eds-migration-process/SKILL.md) | Migration already oriented (strategy exists in `PROJECT-DESIGN.md`) — deciding what phase or page comes next, running content/design validation gates, checking progress. **Not for new projects** — load `migration-orientation` first |
 
 ---
