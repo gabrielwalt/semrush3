@@ -1,0 +1,21 @@
+{
+  "templates": [
+    {
+      "name": "homepage",
+      "description": "Semrush homepage: hero with insights-form, customer logos, two promo teasers, solutions carousel, stats, customer quote, resources carousel.",
+      "urls": [
+        "https://www.semrush.com/"
+      ],
+      "blocks": [
+        { "name": "hero", "instances": [".mp-hero"] },
+        { "name": "logos", "instances": [".mp-logo-marquee"] },
+        { "name": "teaser-one", "instances": [".mp-promo-cards.mp-semrush-one"] },
+        { "name": "teaser-enterprise", "instances": [".mp-promo-cards.mp-enterprise"] },
+        { "name": "solutions", "instances": [".mp-section.mp-toolkits"] },
+        { "name": "stats", "instances": [".mp-section.mp-stats"] },
+        { "name": "quote", "instances": [".mp-section.mp-client-testimonials"] },
+        { "name": "resources", "instances": [".mp-section.mp-resources"] }
+      ]
+    }
+  ]
+}
