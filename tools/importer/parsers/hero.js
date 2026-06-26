@@ -40,6 +40,11 @@ export default function parse(element, { document }) {
   const formTable = WebImporter.DOMUtils.createTable([['Insights Form'], [formCell]], document);
   wrapper.appendChild(formTable);
 
+  // Section Metadata — the hero section style (centered content + pastel gradient).
+  // Must be the LAST element in the section.
+  const sectionMeta = WebImporter.DOMUtils.createTable([['Section Metadata'], ['Style', 'hero']], document);
+  wrapper.appendChild(sectionMeta);
+
   // The logo marquee is nested INSIDE .mp-hero on the source; move it out as a
   // sibling so it survives this replaceWith and the logos parser can process it.
   const marquee = element.querySelector('.mp-logo-marquee');

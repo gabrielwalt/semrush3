@@ -3,14 +3,14 @@
 ## Current Focus
 
 - Branch: main
-- Active task: T-003 — homepage content imported; awaiting GATE 1 sign-off
-- Last completed: import infrastructure built + run; content/index.plain.html has all 8 blocks in order
-- Next up: GATE 1 approval, then T-004 — build + style blocks (GATE 2)
-- Blocker: awaiting user content-structure validation (GATE 1)
+- Active task: T-004 — styling homepage blocks (GATE 2); hero done, next is logos/teaser
+- Last completed: hero styled (insights-form block + hero section gradient), sections split, Section Metadata support restored in aem.js
+- Next up: style logos, teaser, carousel, stats, quote; then nav + footer; GATE 2
+- Blocker: none
 
 ## Pages
 
 | Page | URL | Content ✓ | Style ✓ | Notes |
 |---|---|---|---|---|
 | Foundation | — | — | ✅ | Global workbench validated by gabrielwalt 2026-06-26 (type/color/buttons read as Semrush) |
-| Homepage | https://www.semrush.com/ | 🔲 | 🔲 | Content modeling in progress |
+| Homepage | https://www.semrush.com/ | ✅ | 🔲 | GATE 1 passed (gabrielwalt 2026-06-26); blocks: insights-form, logos, teaser, carousel(+articles), stats, quote |

@@ -32,3 +32,21 @@ Detection cascade per `marker-driven-import`: section wrappers from the source `
 ## Template-to-Parser Mapping
 
 Single template (homepage) → single parser.
+
+## Import + sectionize workflow (run in order)
+
+The html2md import pipeline **flattens section boundaries** (`<hr>` markers are stripped), so a post-import step re-splits the content into EDS sections.
+
+```sh
+SKILL=/home/node/.excat-marketplace/excat/skills/excat-content-import
+# 1. bundle
+bash $SKILL/scripts/aem-import-bundle.sh --importjs tools/importer/import-homepage.js
+# 2. import (writes content/index.plain.html)
+node $SKILL/scripts/run-bulk-import.js --import-script tools/importer/import-homepage.bundle.js --urls tools/importer/urls-homepage.txt
+# 3. sectionize (splits the flat output into 8 sibling section divs; applies hero section-metadata)
+node tools/importer/sectionize.mjs content/index.plain.html
+```
+
+`tools/importer/sectionize.mjs` splits the flat stream into one top-level `<div>` per block group, keeping each block's eyebrow/heading default content with it. The hero parser emits `Section Metadata → Style: hero`; `scripts/aem.js decorateSections` consumes it into a `.hero` section class (the boilerplate's `decorateSections` was missing Section Metadata support — restored 2026-06-26).
+
+**Always back up `content/index.plain.html` before re-running** — the importer overwrites it.

@@ -52,6 +52,8 @@ var CustomImportScript = (() => {
     formCell.appendChild(p2);
     const formTable = WebImporter.DOMUtils.createTable([["Insights Form"], [formCell]], document);
     wrapper.appendChild(formTable);
+    const sectionMeta = WebImporter.DOMUtils.createTable([["Section Metadata"], ["Style", "hero"]], document);
+    wrapper.appendChild(sectionMeta);
     const marquee = element.querySelector(".mp-logo-marquee");
     if (marquee) element.after(marquee);
     element.replaceWith(wrapper);

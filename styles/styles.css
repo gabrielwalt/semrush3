@@ -385,6 +385,22 @@ main > .section.flush {
   padding: 0;
 }
 
+/* section style: hero — centered content over the brand pastel gradient */
+main > .section.hero {
+  background-image: linear-gradient(180deg, #dceeeb 0%, #e8e1ff 75%, var(--color-bg) 100%);
+  text-align: center;
+  padding-bottom: var(--space-2xl);
+}
+
+main > .section.hero > .default-content-wrapper {
+  max-width: 960px;
+  margin-inline: auto;
+}
+
+main > .section.hero h1 {
+  margin-bottom: var(--space-s);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
