@@ -122,12 +122,12 @@ var CustomImportScript = (() => {
     }
     if (link) {
       const p = document.createElement("p");
-      const strong = document.createElement("strong");
+      const em = document.createElement("em");
       const a = document.createElement("a");
       a.href = abs2(link.getAttribute("href"));
       a.textContent = link.textContent.trim();
-      strong.appendChild(a);
-      p.appendChild(strong);
+      em.appendChild(a);
+      p.appendChild(em);
       cell.appendChild(p);
     }
     const table = WebImporter.DOMUtils.createTable([["Teaser"], [cell]], document);
@@ -180,7 +180,7 @@ var CustomImportScript = (() => {
       p.appendChild(em);
       cell.appendChild(p);
     }
-    const table = WebImporter.DOMUtils.createTable([["Teaser"], [cell]], document);
+    const table = WebImporter.DOMUtils.createTable([["Teaser (teaser-dark)"], [cell]], document);
     wrapper.appendChild(table);
     element.replaceWith(wrapper);
   }

@@ -43,16 +43,21 @@ const { document } = dom.window;
 const wrapper = document.body.children[0];
 if (!wrapper) process.exit(0);
 
+function isTeaser(el) {
+  return el.tagName === 'DIV' && el.classList.contains('teaser');
+}
+
 const items = [...wrapper.children];
 const sections = [];
 let current = [];
 let prevWasBlockOrMeta = false;
+let prevEl = null;
 
 items.forEach((el) => {
-  const startNew = current.length > 0 && (
-    // a block that follows another block/metadata starts a new section
+  // Keep consecutive teasers in the SAME section (the promo pair renders side-by-side).
+  const teaserRun = isTeaser(el) && prevEl && isTeaser(prevEl);
+  const startNew = !teaserRun && current.length > 0 && (
     (isBlock(el) && prevWasBlockOrMeta)
-    // default content that follows a block/metadata starts a new section (next group's header)
     || (isDefaultContent(el) && prevWasBlockOrMeta)
   );
   if (startNew) {
@@ -61,14 +66,29 @@ items.forEach((el) => {
   }
   current.push(el);
   prevWasBlockOrMeta = isBlock(el) || isSectionMeta(el);
+  prevEl = el;
 });
 if (current.length) sections.push(current);
 
-// Rebuild: one top-level <div> per section.
+// Rebuild: one top-level <div> per section. A section holding >1 teaser gets the
+// `promo-pair` section style (side-by-side layout).
 const out = document.createElement('div');
 sections.forEach((group) => {
   const sec = document.createElement('div');
   group.forEach((el) => sec.appendChild(el));
+  const teaserCount = group.filter((el) => isTeaser(el)).length;
+  if (teaserCount > 1 && !sec.querySelector('.section-metadata')) {
+    const meta = document.createElement('div');
+    meta.className = 'section-metadata';
+    const row = document.createElement('div');
+    const k = document.createElement('div');
+    k.textContent = 'Style';
+    const v = document.createElement('div');
+    v.textContent = 'promo-pair';
+    row.append(k, v);
+    meta.append(row);
+    sec.append(meta);
+  }
   out.appendChild(sec);
 });
 

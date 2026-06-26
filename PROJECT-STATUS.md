@@ -4,8 +4,8 @@
 
 - Branch: main
 - Active task: T-004 — styling homepage blocks (GATE 2); hero done, next is logos/teaser
-- Last completed: hero styled (insights-form block + hero section gradient), sections split, Section Metadata support restored in aem.js
-- Next up: style logos, teaser, carousel, stats, quote; then nav + footer; GATE 2
+- Last completed: logos + teaser blocks styled (teaser-dark variant, promo-pair section); hero done earlier
+- Next up: style carousel (solutions + articles variant), stats, quote; then nav + footer; GATE 2
 - Blocker: none
 
 ## Pages

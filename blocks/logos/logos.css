@@ -1,0 +1,27 @@
+.logos .logos-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-s) var(--space-l);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.logos .logos-list li {
+  display: flex;
+  align-items: center;
+  margin: 0;
+}
+
+.logos .logos-list img {
+  height: 32px;
+  width: auto;
+}
+
+@media (width >= 1024px) {
+  .logos .logos-list img {
+    height: 40px;
+  }
+}

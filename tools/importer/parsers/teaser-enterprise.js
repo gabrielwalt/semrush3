@@ -1,5 +1,7 @@
 /* global WebImporter */
-// Teaser — "Enterprise" promo card (title + body + secondary CTA "Book a demo").
+// Teaser (teaser-dark) — "Enterprise" promo card. On the source this sits on a
+// dark panel (black bg + image) with white text and a white-outline CTA, so it
+// gets the dark variant. Title + body + CTA "Book a demo".
 function abs(url) {
   if (!url) return '';
   if (url.startsWith('//')) return `https:${url}`;
@@ -46,7 +48,7 @@ export default function parse(element, { document }) {
     p.appendChild(em);
     cell.appendChild(p);
   }
-  const table = WebImporter.DOMUtils.createTable([['Teaser'], [cell]], document);
+  const table = WebImporter.DOMUtils.createTable([['Teaser (teaser-dark)'], [cell]], document);
   wrapper.appendChild(table);
   element.replaceWith(wrapper);
 }

@@ -37,13 +37,14 @@ export default function parse(element, { document }) {
     cell.appendChild(p);
   }
   if (link) {
+    // Source CTA is an outline button → secondary (<em>).
     const p = document.createElement('p');
-    const strong = document.createElement('strong');
+    const em = document.createElement('em');
     const a = document.createElement('a');
     a.href = abs(link.getAttribute('href'));
     a.textContent = link.textContent.trim();
-    strong.appendChild(a);
-    p.appendChild(strong);
+    em.appendChild(a);
+    p.appendChild(em);
     cell.appendChild(p);
   }
   const table = WebImporter.DOMUtils.createTable([['Teaser'], [cell]], document);
