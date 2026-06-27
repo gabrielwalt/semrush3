@@ -46,7 +46,7 @@ Block + variant + section-style inventory; one-off registry.
 **Header detail (all closed at GATE 2):**
 - Lavender **promo banner** above the nav ("TRY SEMRUSH ONE FOR FREE…") — 4th nav-fragment section, hoisted by header.js to `.nav-promo-banner`.
 - **Products** and **Resources** are mega-menu dropdowns (nested `<ul>` in the nav fragment → stock `.nav-drop` toggle); Pricing/Enterprise are plain links.
-- nav/footer fragment paths wired via `<meta name="nav">` / `<meta name="footer">` in `head.html` (site-wide) → `/content/nav`, `/content/footer`.
+- nav/footer fragments live at the SITE ROOT (`/nav`, `/footer`) — header.js/footer.js default to those when no `nav`/`footer` meta is set. Do NOT add a `/content/...` meta override in `head.html`: EDS publishes content at the site root, so `/content/nav.plain.html` 404s in production (the `/content/` prefix is a local dev-path artifact only). Removed 2026-06-27 after it broke the published nav/footer.
 
 **Remaining Refined-fidelity note:** stats numbers render at 112px (vs source 180px) — capped to avoid clipping long values (e.g. 289M+); user-confirmed to keep.
 
