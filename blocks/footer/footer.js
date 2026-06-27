@@ -15,7 +15,6 @@ export default async function decorate(block) {
   // decorate footer DOM
   block.textContent = '';
   const footer = document.createElement('div');
-  footer.className = 'footer';
   while (fragment.firstElementChild) footer.append(fragment.firstElementChild);
 
   // loadFragment's decoration strips the authored inner-div classes, so the four
@@ -37,6 +36,38 @@ export default async function decorate(block) {
       section.classList.add('footer-columns');
     }
   });
+
+  // The link-columns section can arrive flattened: one wrapper holding a flat
+  // sequence of <p><strong>heading</strong></p> + <ul> pairs (root /footer) OR
+  // already-grouped column divs (/content/footer). footer.css's grid needs each
+  // column as a direct child, so rebuild the grouping from the heading→list runs
+  // whenever the section isn't already split into multiple column divs.
+  const columns = footer.querySelector('.footer-columns');
+  if (columns) {
+    const host = columns.querySelector('.default-content-wrapper') || columns;
+    const headingsAtTop = [...host.children].filter((c) => c.tagName === 'P' && c.querySelector('strong')).length;
+    // footer.css lays out 4 columns; the flat source has 5 heading groups
+    // (Support + Community are separate). Cap at 4 so Community stacks UNDER
+    // Support in the last column (the rich /content layout), not as a 5th column.
+    const MAX_COLUMNS = 4;
+    if (headingsAtTop > 1) {
+      const colDivs = [];
+      let current = null;
+      [...host.children].forEach((node) => {
+        const isHeading = node.tagName === 'P' && node.querySelector('strong');
+        if (isHeading && colDivs.length < MAX_COLUMNS) {
+          current = document.createElement('div');
+          current.className = 'footer-column';
+          colDivs.push(current);
+        }
+        // overflow headings/lists fall through into the last column (current)
+        if (current) current.append(node);
+      });
+      // Column divs must be DIRECT children of .footer-columns (the grid container),
+      // not nested in .default-content-wrapper, or the grid sees one item.
+      columns.replaceChildren(...colDivs);
+    }
+  }
 
   block.append(footer);
 }
