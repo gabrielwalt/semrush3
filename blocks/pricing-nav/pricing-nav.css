@@ -1,0 +1,99 @@
+/* ── Pricing page two-column layout ──────────────────────────────────────────
+ * Scoped to main:has(.pricing-nav) so it activates ONLY on the pricing page and
+ * never touches the homepage (Frozen-Tools Rule). The toolkit sidebar (first
+ * section) sits in a sticky left column; every other section flows in the right
+ * column. Single column below 1024px (sidebar becomes a horizontal scroller).
+ */
+main:has(.pricing-nav) {
+  margin: 0 auto;
+  max-width: var(--content-width);
+  padding: 0 var(--content-padding);
+}
+
+@media (width >= 1024px) {
+  main:has(.pricing-nav) {
+    display: grid;
+    grid-template-columns: 256px minmax(0, 1fr);
+    column-gap: var(--space-l);
+    align-items: start;
+  }
+
+  /* sidebar section → left column, spanning the full height */
+  main:has(.pricing-nav) > .section:first-child {
+    grid-column: 1;
+    grid-row: 1 / -1;
+    position: sticky;
+    top: calc(var(--nav-height) + var(--space-s));
+  }
+
+  /* content sections → right column */
+  main:has(.pricing-nav) > .section:not(:first-child) {
+    grid-column: 2;
+  }
+}
+
+/* content sections on pricing are tighter than the homepage's 120px rhythm and
+ * already inside the shared container, so reset their padding/width here */
+main:has(.pricing-nav) > .section {
+  padding: var(--space-l) 0 0;
+}
+
+main:has(.pricing-nav) > .section > div {
+  max-width: none;
+  padding: 0;
+}
+
+/* ── Sidebar nav ─────────────────────────────────────────────────────────── */
+.pricing-nav {
+  padding-top: var(--space-l);
+}
+
+.pricing-nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+}
+
+.pricing-nav-list a {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs) var(--space-xs);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-body-m);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-ink-muted);
+  text-decoration: none;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.pricing-nav-list a:hover {
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+}
+
+.pricing-nav-list a[aria-current="page"] {
+  background-color: var(--color-accent-soft);
+  color: var(--color-ink);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* below desktop: sidebar becomes a horizontal pill scroller */
+@media (width < 1024px) {
+  .pricing-nav-list {
+    flex-flow: row nowrap;
+    gap: var(--space-2xs);
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding-bottom: var(--space-2xs);
+  }
+
+  .pricing-nav-list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .pricing-nav-list a {
+    flex-shrink: 0;
+    border: 1px solid var(--color-border);
+  }
+}

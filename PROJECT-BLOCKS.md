@@ -12,6 +12,11 @@ Block + variant + section-style inventory; one-off registry.
 | `carousel` | Horizontal scroll-snap card slider (right-edge bleed, prev/next arrows in header) | homepage (solutions, resources) | ✅ styled (Solutions); articles variant pending |
 | `stats` | Metric rows: dark card (green-gradient arrow panel + big number + label) with description alongside | homepage | ✅ styled |
 | `quote` | Customer testimonial: dark quote card (logo + quote + author) beside a light highlight-stat card | homepage | ✅ styled |
+| `pricing-nav` | Pricing toolkit sidebar — one row per link; marks the current page active (lavender pill). Also owns the pricing two-column page layout (sticky sidebar + content), scoped via `main:has(.pricing-nav)`. | pricing | ✅ styled (GATE 2 pending) |
+| `pricing-plans` | Plan cards (3-up) with a functional Monthly/Annually toggle (segmented control; recomputes monthly = annual ×1.2). First authored row = toggle option list; rest = plan cards [name, tagline, price+struck, CTA, features]. | pricing | ✅ styled (GATE 2 pending) |
+| `comparison-table` | Feature matrix (4-col grid: label + Pro/Guru/Business); "Yes"→check icon; sticky header; rows past 5 collapse behind Expand/Collapse details. | pricing | ✅ styled (GATE 2 pending) |
+| `addons` | Add-on cards (4-up grid): h3 + price + bulleted features; same card elevation as plan cards. | pricing | ✅ styled (GATE 2 pending) |
+| `accordion` | FAQ disclosure — native `<details>`/`<summary>` per row [question, answer]; first open; chevron rotates. | pricing | ✅ styled (GATE 2 pending) |
 
 ## Variants
 
@@ -19,6 +24,7 @@ Block + variant + section-style inventory; one-off registry.
 |---------|-----------|---------|--------|
 | `teaser-dark` | `teaser` | Self-painted dark card (black panel + enterprise-bg.webp, white text/CTA) — the Enterprise promo | ✅ styled |
 | `carousel-articles` | `carousel` | Resources article cards: transparent, image-on-top (3:2), title link + muted description (+ tags row when present) | ✅ styled |
+| `carousel-quotes` | `carousel` | Testimonial cards: surface-tint card, large quote (heading font) + author meta, no media. carousel.js extended additively to keep a 2nd (author) cell on media-less rows. | ✅ styled (GATE 2 pending) |
 
 ## Section Styles
 

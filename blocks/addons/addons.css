@@ -1,0 +1,63 @@
+.addons-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-s);
+}
+
+@media (width >= 1024px) {
+  .addons-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.addons-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  padding: var(--space-s) var(--space-s) var(--space-m);
+  background-color: var(--color-bg);
+  border-radius: var(--radius-m);
+  box-shadow: 5px 5px 25px var(--color-card-shadow);
+}
+
+.addons-card h3 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-heading-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+.addons-price {
+  margin: 0;
+  font-size: var(--font-size-body-m);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ink);
+}
+
+.addons-features {
+  margin: var(--space-2xs) 0 0;
+  padding: var(--space-xs) 0 0;
+  border-top: 1px solid var(--color-border);
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.addons-features li {
+  position: relative;
+  padding-left: var(--space-s);
+  font-size: var(--font-size-body-s);
+  color: var(--color-ink-muted);
+}
+
+.addons-features li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.45em;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--color-brand);
+}

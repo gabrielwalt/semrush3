@@ -1,0 +1,118 @@
+/* Feature matrix: a 4-column grid (feature label + 3 plans). Each block row is
+ * a CSS grid so cells align across rows. */
+.comparison-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.comparison-table-head,
+.comparison-table-row {
+  display: grid;
+  grid-template-columns: 1fr 96px 96px 96px;
+  align-items: center;
+  padding: var(--space-xs) 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+@media (width >= 1024px) {
+  .comparison-table-head,
+  .comparison-table-row {
+    grid-template-columns: 1fr 161px 161px 161px;
+  }
+}
+
+/* header: plan names, sticky under the nav so they stay in view while scanning */
+.comparison-table-head {
+  position: sticky;
+  top: var(--nav-height);
+  z-index: 1;
+  background-color: var(--color-bg);
+  border-bottom: 2px solid var(--color-ink);
+}
+
+.comparison-table-feature {
+  font-size: var(--font-size-body-m);
+  color: var(--color-ink);
+}
+
+.comparison-table-value {
+  font-size: var(--font-size-body-m);
+  color: var(--color-ink-muted);
+  text-align: center;
+}
+
+.comparison-table-head .comparison-table-feature {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-heading-s);
+  font-weight: var(--font-weight-semibold);
+}
+
+.comparison-table-head .comparison-table-value {
+  font-size: var(--font-size-body-m);
+  font-weight: var(--font-weight-semibold);
+  text-align: center;
+}
+
+/* section subheading row spanning all columns */
+.comparison-table-subhead {
+  padding: var(--space-s) 0 var(--space-2xs);
+}
+
+.comparison-table-subhead > div {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-heading-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* "Yes" → check icon */
+.comparison-table-yes {
+  position: relative;
+}
+
+.comparison-table-yes::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="%236a40d0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* collapsed rows */
+.comparison-table-hidden {
+  display: none;
+}
+
+.comparison-table-expanded .comparison-table-hidden {
+  display: grid;
+}
+
+.comparison-table-subhead.comparison-table-hidden {
+  display: none;
+}
+
+.comparison-table-expanded .comparison-table-subhead.comparison-table-hidden {
+  display: block;
+}
+
+/* expand toggle */
+.comparison-table-expand {
+  align-self: flex-start;
+  margin-top: var(--space-s);
+  padding: var(--space-2xs) var(--space-s);
+  border: 1px solid var(--color-ink);
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-body-m);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.comparison-table-expand:hover {
+  background-color: var(--color-ink);
+  color: var(--color-inverse);
+}

@@ -88,3 +88,31 @@
   background-color: var(--color-inverse);
   color: var(--color-ink);
 }
+
+/* checklist content shape (pricing enterprise teaser) — additive: no homepage
+ * teaser carries a <ul>, so these rules only affect the pricing teaser-dark. */
+.teaser ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.teaser ul li {
+  position: relative;
+  padding-left: var(--space-s);
+  font-size: var(--font-size-body-m);
+}
+
+.teaser ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.35em;
+  width: 16px;
+  height: 16px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2318f0bf" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>');
+  background-repeat: no-repeat;
+}

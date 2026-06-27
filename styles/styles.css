@@ -53,9 +53,11 @@
   --color-brand-hover: #5733b0;
   --color-accent: #c190ff;
   --color-accent-hover: #b07cf5;
+  --color-accent-soft: #f2d8ff; /* lavender tint — active pill on pricing nav */
   --color-accent-green: #18f0bf;
   --color-dark-surface: #181e15;
   --color-inverse: #fff;
+  --color-card-shadow: rgb(137 141 154 / 30%); /* soft card elevation (pricing) */
 
   /* spacing scale (8-based) */
   --space-3xs: 4px;

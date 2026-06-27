@@ -142,6 +142,51 @@
   }
 }
 
+/* quotes variant — testimonial cards: large quote + author meta, no media */
+.carousel.carousel-quotes .carousel-card {
+  background-color: var(--color-surface);
+  min-height: 0;
+  justify-content: space-between;
+  gap: var(--space-m);
+}
+
+.carousel.carousel-quotes .carousel-card-body blockquote {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-heading-xs);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-heading);
+  color: var(--color-ink);
+}
+
+.carousel.carousel-quotes .carousel-card-meta {
+  margin-top: auto;
+}
+
+/* stylelint-disable-next-line no-descending-specificity -- independent variant scope (carousel-quotes), never co-occurs with carousel-articles selectors above */
+.carousel.carousel-quotes .carousel-card-meta p {
+  margin: 0;
+  font-size: var(--font-size-body-s);
+  line-height: var(--line-height-body);
+}
+
+.carousel.carousel-quotes .carousel-card-meta p strong {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ink);
+}
+
+.carousel.carousel-quotes .carousel-card-meta p:not(:has(strong)) {
+  color: var(--color-ink-muted);
+}
+
+@media (width >= 1024px) {
+  .carousel.carousel-quotes .carousel-card {
+    width: 400px;
+    min-height: 280px;
+  }
+}
+
 /* nav arrows in the section header */
 .carousel-nav {
   display: flex;

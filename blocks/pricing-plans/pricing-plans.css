@@ -1,0 +1,151 @@
+/* Page title sits left of the toggle; cards in a 3-up grid below. */
+.pricing-plans {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-s);
+}
+
+/* ── Billing toggle ─────────────────────────────────────────────────────── */
+.pricing-plans-toggle-row {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.pricing-plans-toggle {
+  display: inline-flex;
+  gap: var(--space-3xs);
+  padding: var(--space-3xs);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-pill);
+}
+
+.pricing-plans-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2xs);
+  padding: var(--space-2xs) var(--space-s);
+  border: none;
+  border-radius: var(--radius-pill);
+  background-color: transparent;
+  font-family: var(--font-body);
+  font-size: var(--font-size-body-s);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-ink);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.pricing-plans-toggle-btn[aria-pressed="true"] {
+  background-color: var(--color-bg);
+  box-shadow: 0 1px 3px rgb(24 30 21 / 12%);
+}
+
+.pricing-plans-toggle-badge {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-brand);
+}
+
+/* ── Cards grid ─────────────────────────────────────────────────────────── */
+.pricing-plans-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-s);
+}
+
+@media (width >= 1024px) {
+  .pricing-plans-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.pricing-plans-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  padding: var(--space-s) var(--space-s) var(--space-m);
+  background-color: var(--color-bg);
+  border-radius: var(--radius-m);
+  box-shadow: 5px 5px 25px var(--color-card-shadow);
+}
+
+.pricing-plans-card h3 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: var(--font-size-heading-xs);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* tagline = first paragraph (not price/cta) */
+.pricing-plans-card > p:not([class]) {
+  margin: 0;
+  font-size: var(--font-size-body-s);
+  color: var(--color-ink-muted);
+}
+
+/* price line: big number + struck "was" */
+.pricing-plans-price {
+  margin: var(--space-2xs) 0 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2xs);
+}
+
+.pricing-plans-price strong {
+  font-family: var(--font-body);
+  font-size: var(--font-size-heading-l);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ink);
+}
+
+.pricing-plans-price del {
+  font-size: var(--font-size-heading-l);
+  font-weight: var(--font-weight-semibold);
+  color: #a9abb6;
+}
+
+.pricing-plans-billed {
+  margin: 0;
+  font-size: var(--font-size-body-s);
+  color: var(--color-ink-muted);
+}
+
+/* CTA full-width */
+.pricing-plans-cta {
+  margin: var(--space-xs) 0 0;
+}
+
+.pricing-plans-cta .button {
+  display: block;
+  width: 100%;
+  text-align: center;
+}
+
+/* feature list */
+.pricing-plans-features {
+  margin: var(--space-xs) 0 0;
+  padding: var(--space-xs) 0 0;
+  border-top: 1px solid var(--color-border);
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.pricing-plans-features li {
+  position: relative;
+  padding-left: var(--space-s);
+  font-size: var(--font-size-body-s);
+  color: var(--color-ink);
+}
+
+.pricing-plans-features li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.35em;
+  width: 14px;
+  height: 14px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="%236a40d0" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>');
+  background-repeat: no-repeat;
+}

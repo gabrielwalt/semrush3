@@ -10,9 +10,14 @@ export default function decorate(block) {
     card.className = 'carousel-card';
     const cells = [...row.children];
     const media = cells.find((c) => c.querySelector('picture, img'));
-    const body = cells.find((c) => c !== media);
-    // Body (eyebrow + headline) on top, media below — matches the source card.
-    if (body) { body.className = 'carousel-card-body'; card.append(body); }
+    // Non-media cells become the card body. Cards with media (homepage) have one
+    // body cell; media-less cards (carousel-quotes: [quote, author]) keep both —
+    // the 2nd becomes a meta cell. Body on top, media below — matches the source.
+    const bodies = cells.filter((c) => c !== media);
+    bodies.forEach((b, i) => {
+      b.className = i === 0 ? 'carousel-card-body' : 'carousel-card-meta';
+      card.append(b);
+    });
     if (media) { media.className = 'carousel-card-media'; card.append(media); }
     track.append(card);
   });
