@@ -33,8 +33,9 @@ footer .footer-cta p {
   font-size: var(--font-size-body-l);
 }
 
-/* Start free trial — lavender accent pill (authored as <strong><a> → .button.primary) */
-footer .footer-cta .button-container a.button {
+/* Start free trial — lavender accent pill (authored as <strong><a> → .button.primary).
+ * This project's decorateButtons wraps the CTA in .button-wrapper (not .button-container). */
+footer .footer-cta .button-wrapper a.button {
   border-color: var(--color-accent);
   background-color: var(--color-accent);
   color: var(--color-ink);
