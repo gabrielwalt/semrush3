@@ -41,34 +41,37 @@ footer .footer-cta .button-wrapper a.button {
   color: var(--color-ink);
 }
 
-/* link columns */
+/* link columns — footer.js wraps the footer-column sections into this grid */
 footer .footer-columns {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-l);
+  max-width: var(--content-width);
+  margin: auto;
+  padding: var(--space-l) var(--content-padding);
 }
 
-footer .footer-columns p strong {
+footer .footer-column p strong {
   font-family: var(--font-heading);
   font-size: var(--font-size-body-m);
   font-weight: var(--font-weight-semibold);
 }
 
-footer .footer-columns ul {
+footer .footer-column ul {
   list-style: none;
   margin: var(--space-s) 0 var(--space-l);
   padding: 0;
 }
 
-footer .footer-columns li {
+footer .footer-column li {
   margin-top: var(--space-2xs);
 }
 
-footer .footer-columns a:any-link {
+footer .footer-column a:any-link {
   color: var(--color-ink-muted);
 }
 
-footer .footer-columns a:hover {
+footer .footer-column a:hover {
   color: var(--color-brand);
 }
 
