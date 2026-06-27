@@ -55,7 +55,9 @@
 
 @media (width >= 1024px) {
   .pricing-plans-grid {
-    grid-template-columns: repeat(3, 1fr);
+    /* minmax(0, 1fr) — not bare 1fr — so a card's content can't push its track
+     * wider than the column and overflow the right edge (1fr = minmax(auto, 1fr)). */
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -83,23 +85,25 @@
   color: var(--color-ink-muted);
 }
 
-/* price line: big number + struck "was" */
+/* price line: big number + struck "was". Wraps if a card is narrow so the
+ * struck price can't push past the card edge (Business "$416.66/mo $499"). */
 .pricing-plans-price {
   margin: var(--space-2xs) 0 0;
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   gap: var(--space-2xs);
 }
 
 .pricing-plans-price strong {
   font-family: var(--font-body);
-  font-size: var(--font-size-heading-l);
+  font-size: var(--font-size-heading-m);
   font-weight: var(--font-weight-semibold);
   color: var(--color-ink);
 }
 
 .pricing-plans-price del {
-  font-size: var(--font-size-heading-l);
+  font-size: var(--font-size-heading-m);
   font-weight: var(--font-weight-semibold);
   color: #a9abb6;
 }

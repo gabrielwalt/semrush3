@@ -81,6 +81,6 @@ node $SKILL/scripts/run-bulk-import.js --import-script tools/importer/import-hom
 node tools/importer/sectionize.mjs content/index.plain.html
 ```
 
-`tools/importer/sectionize.mjs` splits the flat stream into one top-level `<div>` per block group, keeping each block's eyebrow/heading default content with it. The hero parser emits `Section Metadata → Style: hero`; `scripts/aem.js decorateSections` consumes it into a `.hero` section class (the boilerplate's `decorateSections` was missing Section Metadata support — restored 2026-06-26).
+`tools/importer/sectionize.mjs` splits the flat stream into one top-level `<div>` per block group, keeping each block's eyebrow/heading default content with it. The hero parser emits `Section Metadata → Style: hero`; the boilerplate's `decorateSections` doesn't read Section Metadata, so `decorateSectionMetadata()` in `scripts/scripts.js` consumes it into a `.hero` section class (runs in `decorateMain` right after `decorateSections`). This lives in `scripts.js`, NOT `aem.js` — `aem.js` is the upstream-managed library and edits get overwritten on lib updates (per `eds-code-conventions`).
 
 **Always back up `content/index.plain.html` before re-running** — the importer overwrites it.
