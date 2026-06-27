@@ -3,10 +3,10 @@
 ## Current Focus
 
 - Branch: main
-- Active task: T-005 — style the pricing page additively (GATE 1 passed 2026-06-26)
-- Last completed: Pricing GATE 1 — content structure approved by gabrielwalt (7 sections; 3 fixes applied: deduped Compare Plans, single h1, clean toggle)
-- Next up: style new pricing blocks (pricing-nav, pricing-plans, comparison-table, addons, accordion, carousel-quotes) reuse-first + additive; regression-check homepage; GATE 2.
-- Note: homepage frozen — style pricing additively, never edit frozen blocks.
+- Active task: none — pricing page complete (GATE 1 + GATE 2 passed, FROZEN)
+- Last completed: Pricing GATE 2 — style approved by gabrielwalt 2026-06-27 (cards constrained; section-metadata handler moved aem.js→scripts.js). FROZEN.
+- Next up: scope is homepage + pricing, both frozen. Any further page styles additively (Frozen-Tools Rule).
+- Note: two frozen pages now — homepage + pricing. Style any new page additively, never edit frozen blocks.
 - Blocker: none
 
 ## Pages
@@ -15,4 +15,4 @@
 |---|---|---|---|---|
 | Foundation | — | — | ✅ | Global workbench validated by gabrielwalt 2026-06-26 (type/color/buttons read as Semrush) |
 | Homepage | https://www.semrush.com/ | ✅ | ✅ | GATE 1 + GATE 2 passed (gabrielwalt 2026-06-26). FROZEN. ~97% vs live. Blocks: insights-form, logos, teaser(+dark), carousel(+articles), stats, quote, header, footer |
-| Pricing | https://www.semrush.com/pricing/seo/ | ✅ | 🔲 | GATE 1 passed (gabrielwalt 2026-06-26). Styling next. Blocks: pricing-nav, pricing-plans, comparison-table, addons, accordion, carousel-quotes(variant), teaser-dark(reuse) |
+| Pricing | https://www.semrush.com/pricing/seo/ | ✅ | ✅ | GATE 1 + GATE 2 passed (gabrielwalt; content 2026-06-26, style 2026-06-27). FROZEN. Blocks: pricing-nav, pricing-plans, comparison-table, addons, accordion, carousel-quotes(variant), teaser-dark(reuse) |
