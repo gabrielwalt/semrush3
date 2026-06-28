@@ -27,9 +27,13 @@ Challenge gaps and contradictions; don't passively log.
 
 ## Capture cleanly
 - **Write the fact in its home** — one dense declarative line, no timestamps, no "the user said". Moving = write in the new home, delete the old line. No ceremony.
-- **Consolidate in place** when you touch a file: merge a near-duplicate, fix a contradiction (newer/confirmed wins).
-- **Promotion is trivial**: personal → project = move the line to `PROJECT-CONTEXT.md` once it proves general.
+- **Consolidate in place** when you touch a file: merge a near-duplicate, fix a contradiction (newer/confirmed wins). Update-in-place, never append-only.
+- **Honesty tag when reliability isn't obvious:** mark a fact `[verified]` (observed/confirmed) or `[assumed]` (inferred, unconfirmed) so a later reader knows what to trust.
 - Run `tools/quality/km-check.mjs` to catch misplacement/bloat.
+
+## Promotion ladder (two rungs)
+1. **Personal → project:** move a `users/<login>/context.md` line to `PROJECT-CONTEXT.md` once it proves general to the project. (`PROJECT-CONTEXT.md` is also the project's **override layer** over generic skills — a project specific that supersedes a generic default lives here.)
+2. **Project → generic skill (the promotion test):** ask *"would the next project, from a **different source site**, benefit from this?"* If yes, the `PROJECT-CONTEXT.md` fact/procedure graduates into a **generic skill** (`writing-skills`) — so the next migration starts ahead. If it's project-specific, it stays put (or becomes a `project-` skill). `session-close` runs this promotion check.
 
 ## Pitfalls
 - Appending without reading the file → log, not curation.

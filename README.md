@@ -1,6 +1,8 @@
 # Your Project's Title...
 Your project's description...
 
+> **This is the EMA fork of `aem-boilerplate`** — it adds a guided, self-learning, publish-safe migration layer (doctrine, ~50 skills, deterministic checkers, and hooks) on top of the base. See **[ABOUT-EMA-SKILLS.md](ABOUT-EMA-SKILLS.md)** for what it does and how it works; agents start from **[AGENTS.md](AGENTS.md)** and **[skills/README.md](skills/README.md)**.
+
 ## Environments
 - Preview: https://main--{repo}--{owner}.aem.page/
 - Live: https://main--{repo}--{owner}.aem.live/

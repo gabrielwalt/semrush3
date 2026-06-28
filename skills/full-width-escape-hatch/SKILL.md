@@ -31,8 +31,6 @@ main > .section > .full-width {
 }
 ```
 
-That's it. No CSS changes needed in the block file.
-
 ## When to use
 - Block needs viewport-width bleed (marquee, announcement bar, video hero)
 - Section background color must reach the viewport edge

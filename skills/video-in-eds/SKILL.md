@@ -36,7 +36,7 @@ cell.querySelectorAll('a').forEach((link) => {
 ## Pitfalls
 - Absolute cross-origin video URLs in href → CORB in Chrome. Use relative hrefs.
 - `autoplay` + `IntersectionObserver` → race condition. Use observer only, no autoplay attribute.
-- Never rely on `href` alone for the source URL — always check link textContent.
+- Never rely on `href` alone for the source URL — EDS rewrites it; read the original from link textContent.
 - AEM CLI serves the main page from remote — local `.plain.html` edits need DA re-upload to take effect.
 
 See also: `eds-code-conventions` (clean implementation rules), `importer-parser-patterns` (emitting video as a link during import — the parser side of this). Native `generate-import-html` covers the same ground at a generic level — this skill adds the relative-href requirement, extensionless-URL detection pattern, and autoplay/IntersectionObserver race-condition rules.

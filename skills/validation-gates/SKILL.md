@@ -13,6 +13,23 @@ A page is "done" only when the **user** confirms it — twice. The agent propose
 
 GATE 1 precedes GATE 2 — never run a style pass on content the user hasn't signed off (you'd polish a structure that may change). `block-visual-iteration` only fires after GATE 1.
 
+## Mechanical pre-checks (run BEFORE asking for sign-off)
+The user confirms *judgment*; a script confirms the *mechanics* first (Executable-Rule Rule). Don't ask for sign-off on output a checker would reject.
+- **GATE 1:** after a re-import, `node tools/quality/content-fidelity.mjs <reference> <candidate>` → exit 0, or fix the parser for each `LOST`/`EXTRA` unit it names (`importer-diff-workflow`). Catches dropped/duplicated content (the A/B's missing content + Compare-Plans duplication) before you ask the user to validate the structure.
+- **GATE 2:** `node tools/quality/detect.mjs <changed files>` (craft-floor) **and** `node tools/quality/css-no-producer.mjs <block>` — the latter flags block CSS class selectors **nothing produces** (a dead `<block>-*` selector → unstyled output, the footer-CSS saga). An ERROR there means the block renders unstyled even if the DOM looks right — fix before screenshotting. Also fires automatically as a PostToolUse hook on block-CSS edits.
+- A green checker is necessary, not sufficient — the user still validates the look. A red checker blocks the ask.
+
+## GATE 2 — the layered visual diff (three signals; (1)+(2) required)
+**The over-claim trap:** the native `excat-visual-critique` extracts values from the **static `.plain.html`** and computes a similarity % — it **never renders pixels**, so overflow, clipping, overlap, and misalignment pass at ≥90%. *Never present a page as styled on the extraction % alone.* Layer three signals:
+1. **Render the real decorated output + screenshot it** (the biggest fix). On `localhost:3000`, **gate on readiness before capturing** — `window.hlx === true`, `body.classList.contains('appear')`, the block's `[data-block-status="loaded"]` — then screenshot. Compare the screenshot of the **actual render**, not the static file.
+2. **Vision critique (blocking).** View the source crop vs the migrated screenshot, per block/section/story, and **enumerate the top layout/overflow/alignment/clipping defects** — a defect list, not a single %. This is the eye extraction structurally lacks. **Prep the live source before capturing it** (dismiss consent overlays, scroll to hydrate lazy content, de-sticky — `measure-then-implement`) or the diff compares a banner-covered, half-loaded page.
+3. **Deterministic extraction = ONE structural signal.** `excat-visual-critique` + the `block-visual-iteration` measure-diff are strong on token/spacing/typography/content/structure deltas the eye misses — keep them, **demoted from "the gate" to one of three.**
+- *(Optional)* perceptual pixel-diff **only** for frozen-page regression (same-page baseline) — never source-vs-migrated (the DOM legitimately differs → false positives).
+- **Diff against the styleguide** (`styleguide-generator`) when it exists — compare the block's stories so the verdict covers every meaningful combination, not one page instance.
+- **Fidelity-aware verdict** (read the mode from `PROJECT-DESIGN.md`, set at `migration-orientation` #8): **Faithful** → flag every real mismatch against the source. **Refined / Reimagined** → classify each delta as *intended refinement* / *acceptable simplification* / *unintended miss*, and push to close only the last — don't chase a similarity % or report intended deviations as failures.
+- **Latency (cost accepted, quality first):** capture all source+migrated screenshots in **one sequential sweep** (the Playwright MCP shares one browser), then **fan the vision critique out across parallel sub-agents** (reasoning isn't browser-bound).
+- No completion claim passes GATE 2 without (1) the rendered screenshot **and** (2) the vision defect list (`verify-before-claiming`).
+
 ## Who marks it (the protocol)
 1. Agent finishes the work and **asks for validation explicitly** — content: "validate the structure (split + block names)"; style: "are you satisfied with how it looks vs the original?" (per AGENTS.md concluding-answer rule).
 2. **User confirms verbally.** That confirmation is the gate event — not the agent's own "looks right".

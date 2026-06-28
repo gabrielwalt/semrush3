@@ -58,7 +58,7 @@ A section's heading/eyebrow MUST take the **same horizontal alignment as the con
 2. For block-level grids: `display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: var(--spacing-m)` — adjust minmax to the design's card width.
 3. For two-column content+media: `display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-l)` — flip order with `order` or `direction` for the reverse variant, never duplicate the block.
 4. Establish rhythm with `vertical-spacing-system` tokens — don't invent new spacing values; map the design's spacing to the nearest token.
-5. Verify: squint test at 20% opacity on each layout — one dominant focal region should be obvious; if two regions compete equally, increase the size or weight contrast of the intended primary.
+5. Verify with the squint test (above) on each layout — one dominant focal region should be obvious; if two compete equally, increase the size or weight contrast of the intended primary.
 
 ## Verify
 - [ ] Squint test passes: primary / secondary / groupings readable when blurred.

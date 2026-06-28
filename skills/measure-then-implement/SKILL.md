@@ -5,6 +5,14 @@ description: Pixel-matching an original site's dimensions, spacing, colors, hove
 
 If you don't know a value, measure it — never guess. Guessing creates a correction loop (too big → too small → still wrong) that costs multiple prompts. Pixel-match requires measuring programmatically, not eyeballing. Hover colors come from stylesheet rules (can't trigger `:hover` via JS).
 
+## Prep the live source BEFORE you measure or screenshot
+Garbage-in: a cookie/consent banner over the hero, blank `loading="lazy"` images, or a sticky nav double-rendering in a full-page capture all corrupt both the measurement and the GATE-2 diff. Prep first (Playwright `evaluate`), then capture:
+1. **Dismiss** cookie/consent/overlay dialogs (accept/close, or remove the overlay node and restore `document.body.style.overflow`).
+2. **Scroll top→bottom** to hydrate `loading="lazy"` / IntersectionObserver content, then back to top.
+3. **De-sticky:** set `position: fixed`→`relative` on sticky headers/bars so a full-page screenshot doesn't double-render them.
+
+Only then measure/screenshot. *(Caveat: motion/animation verification runs in a separate **motion-enabled** pass — don't disable animations there; see `styleguide-generator` stories.)*
+
 ## When to measure (not guess)
 - Any specific px value: font-size, height, width, padding, gap, margin
 - Any color that isn't a project design token

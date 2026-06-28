@@ -72,4 +72,18 @@ Three non-obvious requirements for `backdrop-filter: blur()` to render correctly
 
 ---
 
+## Section first-class collides with a layout CSS rule (most common post-conversion layout bug)
+A Section Metadata `Style` value becomes the section's **first class**. If that class name also exists as a CSS selector with **layout properties** (`display`, `grid`, `flex`, `width`, `height`, `visibility`), the rule fires on the whole section — e.g. `.ugc-grid { display:grid; grid-template-columns:repeat(3,1fr) }` applied to the section makes its single inner div one column and the content collapses.
+
+**Rule:** before using a class as a section first-class (style name), grep the CSS — if it appears as a selector with layout props, pick a different discriminator.
+```bash
+for cls in $(grep -oE '<section class="[^"]+' content/<page>.plain.html | sed 's/.*class="//;s/ .*//'); do
+  grep -qE "\.${cls}[[:space:]]*\{" styles/*.css blocks/**/*.css && echo "COLLISION: .$cls is a styled selector — rename the section style";
+done
+```
+
+## Page CSS `section, header, footer { padding }` leaks into the EDS landmark `<header>`/`<footer>`
+A source page often sets `section, header, footer { padding: … }`, harmless there because its real header/footer carry class-level overrides. In EDS the landmark `<header>`/`<footer>` are **bare** (no overriding class), so the generic rule fires full-force — often 128px+ of padding the source never had, pushing the hero ~200px down.
+**Fix** (in `styles/styles.css`): `body > header, body > footer { padding: 0; margin: 0; }` — target the direct-child landmarks so block content inside still gets its spacing.
+
 See also: `measure-then-implement` (measure the original's rendered tile size before picking a value), `css-specificity-eds` (when the computed value still isn't what you set)

@@ -15,7 +15,7 @@ See `full-width-escape-hatch` skill for the complete pattern. Key point: add `.f
 
 ## JavaScript
 - No layout coupling between blocks — each block is self-contained
-- No `aem.js` edits
+- **Never edit `scripts/aem.js`** (or any upstream lib file) — it's overwritten on the next lib update; customize in `scripts/scripts.js`. This is an always-on AGENTS.md NEVER rule (⛔ enforced by `tools/quality/guard-hook.mjs`); restated here for the why.
 - `decorate()` must handle missing/optional content gracefully
 
 ## Clean and lean

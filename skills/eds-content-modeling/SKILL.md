@@ -3,7 +3,7 @@ name: eds-content-modeling
 description: The authoritative decision framework for "augmented styles" — how to model authored content in EDS using a small set of baseline blocks expanded by variants, section styles, and page templates. Use when planning a block's authoring structure, deciding block vs variant vs section style vs template, or naming any of them. Not for debugging how EDS renders content (see eds-content-patterns).
 ---
 
-Keep a **small set of baseline blocks**; expand with variants, section styles, and templates. Escalate only when a lower rung can't express it — lower rungs are cheaper to author and test. Goal: minimize the variant × section-style × template test matrix.
+Keep a **small set of baseline blocks**; expand with variants, section styles, and templates. Lower rungs are cheaper to author and test. Goal: minimize the variant × section-style × template test matrix.
 
 ## The ladder (escalate only when the lower rung can't express it)
 
@@ -43,7 +43,13 @@ Rules:
 - **Decorative image files referenced from CSS/JS MUST live in `/icons/` (git-tracked code), never `/content/images/`.** `/content/images/` is author-managed content uploaded separately via the Console — files there are NOT in the code repo and 404 on the local dev server (it proxies them from remote). So a CSS `url()` pointing at `/content/images/` is both a content-ownership violation and a local-render bug. When you add or copy a decorative background, put the asset in `/icons/` and reference `/icons/<name>`. See `eds-section-style-icons`.
 - Litmus test: "Would an author or translator ever need to edit this?" → yes = content; no/decorative = code (in `/icons/`).
 
+## The No-JS-Reconstruction Rule (anti-pattern — match and refuse)
+If you're about to write JS that **infers structure from content** to rebuild what the pipeline stripped — content-signature tagging (`if (el has a heading) → add .cta`, `if (text includes "©") → .social`), a hardcoded `MAX_COLUMNS = 4`, or "merge the Community column under Support" — **stop.** That structure vanished because it was authored as nested `<div>`s / classes, which the plain pipeline flattens and strips (`eds-dom-structure`).
+- **The rewrite:** re-model it **in content** as top-level sections + Section Metadata (or a table-block) so the structure is authored and survives; JS then decorates what's already there — it never reconstructs it.
+- **Reference (the clean case):** the footer — a fragment of sections + Section Metadata + a ~20-line `footer.js` that only loads the fragment and appends it, **zero heuristics**. If a block's `decorate()` is growing branches to *guess* structure, the content model is wrong, not the JS.
+
 ## Blocks vs default content & content model
+- **The Typing Test (first heuristic).** Could an author make this by typing in a Word/Google doc — headings, paragraphs, lists, a link? → **default content.** Does it need a deliberate structure/layout the author couldn't just type? → **block.** A layout with **≥2 columns or rows** of related, repeating content → block. *Detect the C×R deterministically, don't eyeball:* read the children's `getBoundingClientRect()` and cluster by `top` (rows) and `left` (columns); ≥2 columns of related content ⇒ block.
 - **Prefer default content over blocks.** Eyebrows, section headings, subtitles, and CTAs introducing a block belong in the section's default content above the block — not in the block's first row.
 - **Content determines materialization; variants/styles determine appearance & behavior.** Don't bake a one-off look or behavior into a block's identity (image → image teaser, video → video teaser is content's call; "expansible" is a variant).
 - **Cell conventions, so a block can be transformed into a sibling block.** Keep row/cell layout systematic across similar blocks. If one uses `[h2, p, CTA]` in a text cell, don't split another into `[h2]` + `[p, CTA]` for the same logical content.
@@ -52,7 +58,7 @@ Rules:
 ## Blocks vs variants
 - Prefer reuse + variants over new blocks. New block only when structure is fundamentally different or a variant needs >50% new JS/CSS.
 - A variant is a CSS/JS toggle (class name) over the **same content structure** — not a different content model. Different row/cell layout = different block.
-- **Reuse before inventing.** Before inventing any new block/variant/section-style, try to reproduce the target look with what already exists — rename, switch variant, add a section style, combine them. Only add a new item for what the existing blocks/variants/section-styles genuinely can't express.
+- **Reuse before inventing.** Before adding any new block/variant/section-style, try to reproduce the target look with what already exists — rename, switch variant, add a section style, combine them. Only add a new item for what existing ones genuinely can't express.
 
 ## Variant vs. extending base styles — a key distinction
 A **variant** is for a different *look* of the same content. A **new content shape** (the same block fed a combination it hasn't handled before — e.g. a `teaser` with image-only, or title+video, or an extra heading level) is NOT a variant: handle it by **adding additive rules to the base block's CSS/JS**, not by minting a variant. Litmus test: "Is the difference *how it looks* (→ variant) or *what content it contains* (→ extend base styles)?" Keep such base additions additive so blocks on already-validated pages don't move (`styling-additively`, `regression-guard`).
@@ -71,6 +77,12 @@ Some blocks are **placeholders for an interactive feature** whose substance is *
 - These hold **little authored content** — typically just the CTA label and any on-page placeholder/helper text the author should control. Everything else (results, fetched data) is pulled from backend systems at runtime and is NOT content.
 - Still follow content ownership: the few author-facing strings (CTA text, placeholder copy) live in the content; the dynamic data does not.
 - Name them semantically by what they let the visitor do, like any block. Document clearly that the block is a placeholder and what data it pulls.
+
+## Interactive controls (toggles, tabs, segmented controls)
+A source toggle / tab / segmented control (Monthly⇄Annually, plan-tier selector) must **NOT** import as literal checkbox glyphs (`[x]Monthly [ ]Annually`) — that isn't authorable content. Model the **options as a clean list** (one option per item); the block's JS turns the list into the control and owns active state.
+- **One cell / list-item per option** — the html2md roundtrip glues multiple `<p>`s in a single cell, so keep each option in its own item or the labels merge.
+- The author edits **labels** (content); active state + switching behavior are the block's job (code), never authored glyphs.
+- If the control's body is data-driven/hydrated at runtime, treat it as a **placeholder block** (above) — author the labels, fetch the rest. If JS hydration may lag, the authored list is the no-JS fallback.
 
 ## Section styles
 - For styling that spans **multiple blocks** and where **default content should also be able to get it** (e.g. background color, an arbitrary multi-column layout the author fills freely). That "default content wants it too" test is the key signal for a section style over a block variant. Prefix `section-`, set via Section Metadata.
@@ -101,4 +113,4 @@ Some blocks are **placeholders for an interactive feature** whose substance is *
 - Missing source content at import time → leave empty, don't invent.
 - Reaching for a template/variant when default content + an auto-style would do.
 
-See also: `container-block-vs-section-style` (tabs/accordion that must hold other decorated blocks), `styling-additively` (add new items, don't edit existing ones), `eds-content-patterns` (CTA + eyebrow auto-styles), `vertical-spacing-system` (foundation + universal spacing variants), `page-template-metadata` (template mechanism + conservative-creation rule), `importer-parser-patterns` (parser implementation), `PROJECT-BLOCKS.md` (block inventory + one-off registry). Native `edge-delivery-services:content-modeling` and `block-mapping-manager`/`block-variant-manager` cover generic modeling — **this augmented-styles ladder and naming convention take precedence** on this project.
+See also: `container-block-vs-section-style` (tabs/accordion that must hold other decorated blocks), `styling-additively` (add new items, don't edit existing ones), `eds-content-patterns` (CTA + eyebrow auto-styles), `vertical-spacing-system` (foundation + universal spacing variants), `page-template-metadata` (template mechanism + conservative-creation rule), `importer-parser-patterns` (parser implementation), `styleguide-generator` (when you create a block/variant/section-style, add its stories and verify every meaningful content combination renders), `PROJECT-BLOCKS.md` (block inventory + one-off registry). Native `edge-delivery-services:content-modeling` and `block-mapping-manager`/`block-variant-manager` cover generic modeling — **this augmented-styles ladder and naming convention take precedence** on this project.

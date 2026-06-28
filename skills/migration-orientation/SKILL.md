@@ -14,11 +14,11 @@ Before Round 1, do this silently:
 2. **Read `PROJECT-DESIGN.md`** and `PROJECT-STATUS.md` if they exist — some answers may already be recorded.
 3. **Look at `PROJECT.md`** or `AGENTS.md` for any project-level guidance.
 
-Derive as many answers as you can from inspection. Assert those; only ask about the rest. A well-inspected source site should resolve 4–5 of the 12 inputs before the first question lands.
+Derive as many answers as you can from inspection. Assert those; only ask about the rest. A well-inspected source site should resolve 4–5 of the 13 inputs before the first question lands.
 
 ## The conversation — assert-then-confirm, one round at a time
 
-Do not dump all questions at once. Assert what inspection makes obvious, ask only what remains open. **Offer a concrete default for every open question.** Cover the 12 inputs across up to 3 rounds. Skip any the inspection already answers.
+Do not dump all questions at once. Assert what inspection makes obvious, ask only what remains open. **Offer a concrete default for every open question.** Cover the 13 inputs across up to 3 rounds. Skip any the inspection already answers. When a question is a genuine choice (not just a default to confirm), give each option its **consequence**, not just a label (AGENTS.md explain-consequences rule) — as the fidelity scale below does.
 
 ---
 
@@ -44,6 +44,7 @@ Assert the authoring model immediately. For scope, if the user mentioned a URL o
 | **7** | **Additional resources** — Figma links, brand guidelines, style guides, reference EDS implementations, fonts, icon sets, existing token files? | None — ask explicitly: "Do you have a Figma file, brand guidelines, or any reference to share before we build the foundation?" |
 | **8** | **Fidelity** — site-wide default on the Faithful / Refined / Reimagined scale (defined below) | **Faithful** for a strong, modern-looking source; **Refined** if the source looks dated or uneven; assert based on inspection |
 | **9** | **Templates or content to improve** — are any pages/templates meant to be enhanced or redesigned in the process, rather than just copied? | None — pure migration, unless the user signals otherwise |
+| **13** | **Styleguide** — maintain a living styleguide (Storybook-like) for this project: a few pages showcasing default content + every block/variant/section-style as it's built, doubling as the GATE-2 diff target, the block census for reuse, and the test surface for content edge-cases? | **Yes (recommended)** — low cost, high payoff for verification + reuse; skip only for a one-page throwaway |
 
 For fidelity: inspect the source first, then assert — don't offer a menu.
 
@@ -77,15 +78,16 @@ If the user says XWalk, load `excat-xwalk-expert`. If unclear, assert DA — cos
 
 **First-match-wins:** (1) explicit per-page override; (2) site default; (3) Faithful.
 
-- **Faithful** — match the source closely; deviate only to fix outright bugs.
-- **Refined** — keep the brand identity; regularize weak spots and uplevel craft.
-- **Reimagined** — keep the essence; rebuild for graphical excellence.
+Present each with its **consequence** so the user chooses well (the explain-consequences doctrine):
+- **Faithful** — rebuild into clean, idiomatic EDS blocks as close to the source as possible (author-friendly, **not pixel-identical**); deviate only to fix outright bugs. *Consequence:* GATE-2 flags every real mismatch against the source.
+- **Refined** — keep the brand identity; regularize weak spots and uplevel craft (spacing, type, color rigor). *Consequence:* GATE-2 classifies each delta by intent — intended uplift isn't a failure (`validation-gates`).
+- **Reimagined** — keep the essence, rebuild for graphical excellence; prompt for brand assets/guidelines (else free rein within the brand). *Consequence:* the source is a reference, not a target — judged against the new intent.
 
 Fidelity governs *how close to the original*, never *how much craft* — the foundation is rock-solid at every level. Full definitions and how each level shapes the foundation build live in `global-style-foundation`. Orientation's job is only to **capture the user's chosen level**, not to re-explain the framework.
 
 ## Record the strategy (then the gate is passed)
 
-Write all 12 inputs into `PROJECT-DESIGN.md` under `## Migration Strategy` (create it if absent — it belongs at the top, before the token inventory). All round-table inputs go here.
+Write all 13 inputs into `PROJECT-DESIGN.md` under `## Migration Strategy` (create it if absent — it belongs at the top, before the token inventory). All round-table inputs go here.
 
 Verify before claiming done (**Bookend-Verification**): section exists, all inputs recorded, user confirmed fidelity and authoring model.
 
@@ -93,6 +95,7 @@ Verify before claiming done (**Bookend-Verification**): section exists, all inpu
 
 - **Full-site scope + catalog first** → run `excat-site-scope` / `excat-site-catalog` / `excat-url-discovery` to inventory pages and group into templates, then `import-content-scoping` to triage. Report back before touching any page.
 - **Single-page or skip catalog** → go directly to `global-style-foundation` (the workbench) → first page content → gates → per-block styling.
+- **If the styleguide opt-in (#13) is yes** → right after `global-style-foundation`, before the first import, scaffold the initial styleguide (default content + the blocks the first page needs) per `styleguide-generator`.
 
 Orientation sets direction. It does not import, style, or commit anything itself.
 
@@ -103,4 +106,4 @@ Orientation sets direction. It does not import, style, or commit anything itself
 - Recording a single fidelity and forgetting per-page overrides — a weak legacy template copied Faithfully drags the whole migration.
 - Assuming no additional resources without asking — a Figma file found in Round 2 can save days.
 
-See also: `global-style-foundation` (next step), `eds-migration-process` (full workflow this gates), `import-content-scoping` (URL triage for full-site scope), `excat-xwalk-expert` (if XWalk), `measure-then-implement` (Faithful means measure).
+See also: `global-style-foundation` (next step), `styleguide-generator` (if #13 yes — scaffold after the foundation), `eds-migration-process` (full workflow this gates), `import-content-scoping` (URL triage for full-site scope), `excat-xwalk-expert` (if XWalk), `measure-then-implement` (Faithful means measure).

@@ -9,7 +9,8 @@ At the end of every session (or when the user signals they're done):
 1. **Mark completed tasks** — in `PROJECT-PLAN.md`, change `🔲 Open` → `✅ Done` for every task completed this session
 2. **Update `PROJECT-STATUS.md`** — update the progress table and "Current Focus" section
 3. **Capture skills** — for every non-obvious problem solved this session, create or update a skill
-4. **Note current focus** — add a brief note to `PROJECT-STATUS.md` so the next session knows where to resume
+4. **Run the promotion check** — for any durable learning captured this session, apply the promotion test (`curating-project-knowledge`): a `PROJECT-CONTEXT.md` fact/procedure that would help **the next project from a different source** graduates into a generic skill
+5. **Note current focus** — add a brief note to `PROJECT-STATUS.md` so the next session knows where to resume
 
 ## The skill capture test
 Ask: "If the next agent starts fresh, what non-obvious thing would they have to re-discover?"

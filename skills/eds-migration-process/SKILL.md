@@ -14,14 +14,14 @@ Once style is validated, the page's blocks/variants/section-styles/templates are
 ## Flow
 0. **Orient the migration** (new site, before anything) — run `migration-orientation`: settle scope, content source, design source, **fidelity** (Faithful / Refined / Reimagined), reuse strategy, per-page overrides, and constraints. Record them in `PROJECT-DESIGN.md`'s `## Migration Strategy`. **Gate: no import until this exists.**
 1. **Scope the site** — discover URLs and group pages into templates so you know the full scope and which pages are representative. See EMA skills below. Two scope gates apply here: (a) **what to import** — triage marketing vs database-backed vs documentation (`import-content-scoping`); (b) **how few templates** — collapse the raw discovered templates into a handful of canonical ones before any bulk import (`import-template-consolidation`, **The Entropy-Reduction Rule**). Catalog discovery over-splits; do not mint one EDS template per raw template.
-2. **Build the global design foundation** (the *workbench*, once per site) — run `global-style-foundation`: capture the visual gist across ≥3 representative pages and formalize brand tokens, type scale, spacing system, and default-content styling, at the recorded fidelity. **Blocks are not styled until the workbench is level.**
+2. **Build the global design foundation** (the *workbench*, once per site) — run `global-style-foundation`: capture the visual gist across ≥3 representative pages and formalize brand tokens, type scale, spacing system, and default-content styling, at the recorded fidelity. **Blocks are not styled until the workbench is level.** Then, **if the styleguide opt-in (#13) is yes**, scaffold the initial styleguide (`styleguide-generator`) — default content + the blocks the first page needs — **before** the first import. It's the GATE-2 diff target, the reuse census, and the edge-case test surface; grow it as blocks are built.
 3. **Pick a representative page** — prefer one that introduces new blocks.
 4. **Phase 1 — Content** (two ordered steps — see below).
 5. **🚦 GATE 1 — validate content structure** (below) before any design work.
 6. **Phase 2 — Design** (two ordered steps — see below).
 7. **🚦 GATE 2 — validate design** (below).
 8. **Nav + footer** once the first page looks right.
-9. **More pages** — repeat. Style each new page **reuse-first then additive** (Phase 2 step 2): reproduce the look with existing blocks/variants/section-styles before adding anything new, and keep additions scoped to the new page so style-validated pages stay frozen. Prefer pages that introduce new blocks. If in doubt that a change was purely additive, re-check the style-validated pages sharing a touched block (`styling-additively`).
+9. **More pages** — repeat, preferring pages that introduce new blocks. Style each **reuse-first then additive** (Phase 2 step 2): keep additions scoped to the new page so style-validated pages stay frozen; if in doubt a change was purely additive, re-check style-validated pages sharing a touched block (`styling-additively`).
 10. **Bulk import** once representative pages and all block variants are covered.
 
 ## Phase 1 — Content (model first, script second)
@@ -34,8 +34,8 @@ Once style is validated, the page's blocks/variants/section-styles/templates are
 The workbench (`global-style-foundation`) is built once per site before any page's blocks. Phase 2 assumes it exists.
 1. **Confirm the workbench covers this page.** Brand tokens, type scale, and spacing should already render default content on-brand. If this page reveals a *genuinely global* gap, extend the foundation (not a block) and re-verify existing pages didn't move (`regression-guard`).
 2. **Per-block styling — two ordered sub-steps (`styling-additively`), at the page's fidelity** (first-match-wins: per-page override → site default). **Faithful** = measure and match. **Refined** = reproduce intent, strengthen toward foundation. **Reimagined** = keep concept, rebuild for excellence. Then:
-   - **2a. Reproduce the look with what already exists.** Before writing CSS, try to reproduce by choosing among existing blocks/variants/section-styles. Re-import with those choices.
-   - **2b. Add only what's genuinely missing.** New block, variant, section style, or template — new items are seen only by the new page.
+   - **2a. Reproduce the look with what already exists.** Before writing CSS, choose among existing blocks/variants/section-styles — **scan the styleguide as the block census** (Toolbox-First; often the page composes with no new code). Re-import with those choices.
+   - **2b. Add only what's genuinely missing.** New block, variant, section style, or template — new items are seen only by the new page. **Add its stories to the styleguide and verify every meaningful combination renders** (no-image / image-as-video / 0·1·2 CTAs) — `styleguide-generator`.
    - **Editing shared CSS is the exception.** Additive rules for a new content shape (teaser image-only, title+video) are fine. If you must change an *existing* declaration, measure the style-validated instances before/after (`regression-guard`).
 
 ## 🚦 GATE 1 — content structure
@@ -46,9 +46,12 @@ Ask the user to confirm and wait:
 
 ## 🚦 GATE 2 — design
 **Run `excat-visual-critique` before presenting a page/block as styled — don't wait to be asked.** Block / Section / Page / **Site** mode; site mode parallelizes sub-agents per template. Then:
-- Close each surfaced delta with `block-visual-iteration` (critique discovers + scores; that loop fixes).
+- Close each surfaced delta with `block-visual-iteration` (critique discovers + scores; that loop fixes). When the styleguide exists, diff the block's styleguide page against the source and **confirm a look-change holds across all its stories**, not just the page instance.
 - Ask the user to confirm against the source in Console preview: global look right? Each block match the reported %?
 - Iterate on feedback (re-run critique to confirm % moved) before moving on.
+
+## Before any "publish via Console" handoff
+Run `verify-publish-readiness` (→ `publish-readiness.mjs`); surface and help resolve the **specific** missing precondition before emitting the handoff. State the publish model plainly: **these pages WILL be published to EDS; content serves at the SITE ROOT; nav/footer/links/fragments must resolve at the published path, not just localhost.** Confirm nav + footer would render at the published root (no `/content/` fragment meta). Don't publish yourself — the user does it in the Console.
 
 ## EMA skills by stage
 Reach for these native EMA skills — suggest them to the user when they fit. **Where a project skill covers the same step (content modeling, parser strategy, visual QA), the project skill takes precedence** — see `skills/README.md` "Native EMA & EDS skills" for the full precedence map.
@@ -73,8 +76,9 @@ Reach for these native EMA skills — suggest them to the user when they fit. **
 - Don't skip GATE 1 — broken structure is far harder to fix after styling.
 - Don't edit a shared block/variant/section-style to fix a new page — add new styles instead (`styling-additively`).
 - Don't mint a new variant for a different *content shape* — extend the base block's CSS additively.
-- Re-import flattens section boundaries — restore section divs by hand after.
+- Re-import flattens section boundaries (html2md strips `<hr>` wherever emitted) — run `post-import-sectionizer` after, don't restore by hand.
 - `run-bulk-import.js` overwrites `content/*.plain.html` — back up first (`marker-driven-import`).
 - Footer blocks must be in one section (no `<hr>`) or EDS renders rules between them.
+- Spawning a sub-agent for trivial default content, or hand-writing N fan-out prompts → batch instead: generate the fan-out prompts mechanically and spawn in one turn; skip sub-agents for default content (cost/turn discipline).
 
-See also: `migration-orientation` (step 0 — strategy recorded before any import), `global-style-foundation` (step 2 — the workbench), `styling-additively` (reuse-first, additive styling), `marker-driven-import` (ONE generic parser once content is validated), `eds-content-modeling` (block/variant/section/template decisions), `importer-parser-patterns` (writing parsers)
+See also: `migration-orientation` (step 0 — strategy recorded before any import), `global-style-foundation` (step 2 — the workbench), `styleguide-generator` (scaffold after the foundation; the diff target + reuse census + edge-case test surface), `styling-additively` (reuse-first, additive styling), `marker-driven-import` (ONE generic parser once content is validated), `eds-content-modeling` (block/variant/section/template decisions), `importer-parser-patterns` (writing parsers), `verify-publish-readiness` (precondition gate before a publish handoff), `debug-eds-publish` (when publish/nav/footer fails)

@@ -19,10 +19,12 @@ Simplicity is elegant and the ultimate sophistication. Every line of code and ev
 ## Rules
 
 **Concluding answer.** End every substantive reply with:
-1. **Summary** — what you did or decided, and actively invite the user's feedback on it. After a content import, ask the user to validate the content structure (the split into default content, blocks, and sections, and the block names); after importing design (global styles or a block's styling), ask whether they're satisfied with how the content looks and what to improve. Their validation drives the next step.
+1. **Summary** — what you did or decided, and actively invite the user's feedback on it. After a content import, ask the user to validate the content structure (the split into default content, blocks, and sections, and the block names); after importing design (global styles or a block's styling), ask whether they're satisfied with how the content looks and what to improve. **At a no-render stage (foundation/analysis), reassure nothing renders yet and why, and name what *is* reviewable** (`PROJECT-DESIGN.md` tokens, the styleguide). Their validation drives the next step.
 2. **Next step** — one concrete question proposing the logical follow-up; consult `eds-migration-process` for where the user is in the migration flow and what comes next. No vague sign-offs.
 3. **Skill check** — if the solution involved non-obvious knowledge, propose capturing it: *"Should we distill [X] into a skill to prevent this friction in the future?"*
 4. **Knowledge capture** — if the user's message held durable knowledge (a decision, constraint, fact, preference, correction, or reusable procedure), capture it per `curating-project-knowledge` (skip-list → route by one test → write it down), and ask whether formalizing it would help. Skip silently when nothing durable surfaced.
+
+**Explain consequences on every question.** Whenever you ask the user to choose — especially via `AskUserQuestion` — each option must carry a short consequence/trade-off, not just a label, so the user can decide well. Applies across fidelity, scope, content-modeling, identity, and any either/or. A bare option list is incomplete; name what each choice will mean.
 
 **Session startup.** At the start of every new conversation — before responding to any request:
 1. Read `PROJECT-STATUS.md` — current state, active task, known blockers
@@ -61,9 +63,27 @@ Do not propose a new plan if one exists in PROJECT-PLAN.md. Do not ask what to w
 
 **Content structure = import script.** The import script is the authoritative mapping from source DOM to EDS content. Never change a block's structure without updating the import script. Edits to `.plain.html` files are temporary; the script is the truth.
 
-**Never run the import script without backing up content first.** `run-bulk-import.js` writes directly to `content/*.plain.html` with no `--output-dir` flag — it silently overwrites curated content that has DA media hashes, spacing classes, and section boundaries. The import's markdown pipeline flattens section dividers, so the output is structurally different from the served content. Always `cp` the content file before running, or restore from the remote AEM endpoint after: `curl -s 'https://<branch>--<repo>--<owner>.aem.page/<path>.plain.html' -o content/<path>.plain.html`.
+**Never run the import script without backing up content first.** `run-bulk-import.js` writes directly to `content/*.plain.html` with no `--output-dir` flag — it silently overwrites curated content that has DA media hashes, spacing classes, and section boundaries. The import's markdown pipeline flattens section dividers, so the output is structurally different from the served content. Always `cp` the content file before running, or restore from the remote AEM endpoint after: `curl -s 'https://<branch>--<repo>--<owner>.aem.page/<path>.plain.html' -o content/<path>.plain.html`. This `cp` protects your curated reference; it does **not** protect author edits made *upstream* — DA admin PUT has no merge semantics and silently discards them, so before a re-import/republish that could clobber author work, the user GET+diffs the remote first (`marker-driven-import`).
 
 **No Git, no AEM pushes.** Never run `git`, and never commit, push, publish, or upload content yourself — not even as a suggestion or "next step". When code/content needs to go live, tell the user to do it via the Console UI.
+
+---
+
+## NEVER — publish-correctness (always-on)
+
+A migrated project **will be published to EDS**, where content serves at the **site root** and the DA "plain" pipeline **flattens nested `<div>`s and strips authored `class`/`id`/`style`/`data-*`**. Local `aem up` runs the real decoration, so *local-correct ⇒ publish-correct* **iff** none of these are violated. The list is the primary, always-in-context prevention; it is terse on purpose — bloat erodes adherence. (⛔ = also enforced by `tools/quality/guard-hook.mjs`, wired in `.claude/settings.json`; the unmarked ones are judgment calls a script can't decide without false positives, so they live here only. Each links the skill with the full recipe.)
+
+- ⛔ **Never edit `scripts/aem.js`** (or any upstream lib file) — it's overwritten on the next lib update. Customize in `scripts/scripts.js`. → `eds-code-conventions`
+- ⛔ **Never use a `/content/…` absolute path** anywhere code- or author-visible (nav/footer meta, links, fragment refs) — EDS serves at the **site root**. → `nav-header-eds`
+- ⛔ **Never set `head.html` `nav`/`footer` meta to `/content/…`** — leave the default (root) or use `/nav` `/footer`. → `nav-header-eds`
+- ⛔ **Never write `content/*.plain.html` directly** — go through the import script (see *Content structure = import script*). *Sole exception: `content/styleguide/` — net-new authored reference pages (`styleguide-generator`).*
+- ⛔ **Never run `git` / commit / push / publish** — the user does it via the Console (see *No Git, no AEM pushes*).
+- **Never author structure as nested `<div>`s or with author `class`/`id`/`style`/`data-*`** — the pipeline strips them. Model structure as **top-level sections + Section Metadata or table-blocks**. → `eds-content-modeling`, `eds-dom-structure`
+- **Never reconstruct lost structure in JS** (no content-signature tagging, no hardcoded column counts) — re-model it in content. → `eds-content-modeling`
+- **Never name a non-block wrapper with a block class** — it inherits `visibility:hidden` and never reveals. → `debug-block-decoration`
+- **Never ship block CSS whose selectors target classes nothing produces** — run `css-no-producer`. → `validation-gates`
+- **Never re-run the import or overwrite content without backing up first** (see *Never run the import script without backing up content first*).
+- **Never call visual work "done"/"verified" from DOM properties alone** — a screenshot is the proof. → `verify-before-claiming`
 
 ---
 

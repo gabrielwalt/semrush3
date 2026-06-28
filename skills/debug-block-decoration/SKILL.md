@@ -5,6 +5,11 @@ description: Debug a block whose decorate() JS emits wrong DOM — missing, part
 
 Block shows partial/no content despite correct authored content → the bug is in `decorate()` JS selector logic. Never chase infrastructure.
 
+## Before theorizing about a symptom
+- **Reproduce the user's exact symptom on their exact route** — a different observation on a different route isn't their bug; a tool's "X is broken" may mean your probe was pointed wrong (confirm it loaded the runtime / the file exists where you looked).
+- **Go find the disconfirming fact yourself** ("other blocks work fine" kills a "decoration is broken" theory — don't wait to be corrected).
+- **Envs differ but code+content byte-identical → stale cache**, not a code bug — force-reload the specific resource first.
+
 ## Recipe
 
 1. **When you receive `<element_context>`, that IS the user's live preview.** Navigate to `http://localhost:3000/content/index` (or the relevant path) with playwright and inspect the DOM immediately. Don't navigate to `.html` — use the path without extension. **The bare root `http://localhost:3000/` does NOT inject the EDS runtime (only `livereload.js`), so NO blocks decorate there — it is not a valid preview route.** Before trusting any "nothing is decorated" observation, confirm the served HTML contains `scripts/aem.js` (`curl -s <url> | grep aem.js`). If it doesn't, you are on the wrong route, not looking at a decoration bug.
@@ -36,7 +41,8 @@ cell.querySelectorAll('img, picture').forEach((el) => {
 - Never modify content files to work around a JS bug — if content is correct in the editor, block code is wrong.
 - Never hardcode fallback URLs in block JS — masks bugs, creates debt.
 - Don't theorize about CDN/auth/pipeline before reading the `decorate()` function. Read the code FIRST.
-- The user's preview IS localhost:3000 (proxied via preview-aemcoder.adobe.io). Same server, same content, same auth.
+- **Preview ≠ published EDS — don't assume parity.** localhost:3000 (`aem up`) serves your local `content/` at the path you load and **proxies the published site for anything it lacks locally (can be stale)**; published EDS serves content at the **site root** (`/nav.plain.html`, not `/content/…`). The two can legitimately differ — "works locally" is not proof it's published-correct (the AGENTS.md NEVER list owns that).
+- **Block occupies space but paints blank/invisible → the visibility-reveal lifecycle.** EDS keeps blocks/sections `visibility:hidden` until decoration sets `[data-block-status="loaded"]`. If you **name a non-block wrapper with a block class** (e.g. `wrapper.className = 'footer'`), it matches the hidden rule but never gets `data-block-status` set → invisible-but-occupies-space. **Never give a structural wrapper a block class** (NEVER list; lifecycle in `eds-dom-structure`).
 - If your first theory is wrong, stop theorizing and read the block's `decorate()` function. Do not propose a second theory without having read the code.
 - One env renders differently but the block's JS/CSS and `.plain.html` are byte-identical (verify with `md5sum` / `curl --compressed`) → it's a **stale CDN/proxy cache**, not a code bug. Hard-reload the specific resource (`/nav.plain.html`, the block's `.js`) before changing anything.
 

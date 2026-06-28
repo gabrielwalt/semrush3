@@ -5,10 +5,13 @@ description: The mechanical bash recipe for diffing a re-imported page against i
 
 After any parser change, diff each re-imported page against its remote reference to catch silent content loss. The remote AEM endpoint is the reference truth; the local `content/` file is what you just generated.
 
+## Deterministic check (preferred) — `content-fidelity.mjs`
+Run the checker instead of eyeballing — it normalizes DA media hashes, ignores the blockified tag tree, and flags **only** lost/duplicated content (text units, headings, images, block counts):
 ```bash
 curl -s 'https://<branch>--<repo>--<owner>.aem.page/<path>.plain.html' -o /tmp/ref.html
-diff -u /tmp/ref.html content/<path>.plain.html   # unified diff — context lines expose text drift too
+node tools/quality/content-fidelity.mjs /tmp/ref.html content/<path>.plain.html
 ```
+Exit 0 = no loss/dup; exit 2 = it names each `LOST`/`EXTRA` unit. This is the Executable-Rule version of the triage table below; for eyeballing surrounding context use `diff -u /tmp/ref.html content/<path>.plain.html` (context lines expose text drift too).
 
 To check **all** validated pages after a parser change (edits ripple — a fix for page A often regresses page B):
 ```bash
@@ -35,4 +38,4 @@ Diffs **only** in the left column → import is good. **Any** right-column diff 
 - Diffing only the page you changed — parser edits ripple; diff every validated page.
 - Letting the import write to `content/` instead of a temp/ref copy — back up first (`marker-driven-import`); never clobber the validated reference.
 
-See also: `marker-driven-import` (the validation loop this implements; backup-before-import rule), `importer-parser-patterns` (fixing the parser when a diff shows loss)
+See also: `marker-driven-import` (the validation loop this implements; backup-before-import rule), `importer-parser-patterns` (fixing the parser when a diff shows loss), `quality-tooling` (`content-fidelity.mjs` — the deterministic content-loss checker)

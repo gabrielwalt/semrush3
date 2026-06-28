@@ -4,36 +4,28 @@ description: What to do at the start of every new session. Load at session start
 ---
 
 ## Identity gate — first, every session
-Before any work, establish who you're working with:
-1. Read `users/.current-user` (a gitignored, workspace-local file). If present, that login is the active user.
-2. If absent: ask "What's your GitHub username? I can't read it from the environment." Write it to `users/.current-user`. If `users/<login>/` doesn't exist, scaffold it — ask the user's role + current focus, then create `ROLE.md` (Role · Focus · `Lead: yes/no`), an empty `context.md`, and `plan.md`.
-3. Once known, load `users/<login>/` (ROLE + context + plan).
+Establish who you're working with, but **assume the site owner** — don't interrogate role.
+1. Read `users/.current-user` (gitignored, workspace-local). If present → that login is active; load `users/<login>/` and **proceed silently** (returning user → ask nothing).
+2. **If absent — ask ONLY the GitHub username** ("What's your GitHub username? I can't read it from the environment."); write it to `users/.current-user`. Then branch:
+   - **First user** (no other `users/<login>/` dirs exist) → assume **SITE OWNER**. Scaffold `users/<login>/` with `ROLE.md` (`Lead: yes`), empty `context.md`, `plan.md`. **Don't ask role** — infer focus/scope from the opening prompt and record it.
+   - **New, different user** (login unseen AND other `users/<login>/` dirs exist) → **multi-user**: **warn** that another user (name them) is already on this project, then clarify **scope** (limited vs full) — inferred from their first prompt where possible, asked only if unclear. Default the newcomer to `Lead: no`.
+3. Ask about role/lead only on a concrete reason (a freeze/ownership conflict, or the user volunteers it).
 4. Until identity is known, don't capture to user files — ask first.
 
 ## Precondition gate — uninitialized project
-If `PROJECT-STATUS.md` or `PROJECT-PLAN.md` does not exist, the project is uninitialized. Stop here — load `bootstrap-project` instead of running the sequence below.
-
-At the start of every session, before doing any work:
+If `PROJECT-STATUS.md` or `PROJECT-PLAN.md` is missing, the project is uninitialized → load `bootstrap-project` instead of the sequence below.
 
 ## Startup sequence
-1. Read `PROJECT-STATUS.md` — what's done, what's in progress, known blockers
-2. Read `PROJECT-CONTEXT.md` — the project's accumulated wiki knowledge (environment, constraints, decisions). Skip if it doesn't exist yet.
-3. **Run `node tools/quality/project-state.mjs`** (`quality-tooling`) — ground-truth JSON for which pages are `frozen` vs `unfrozen`/in-progress, the content files present, and the working-tree changes. Prefer this over inferring state from prose; the prose can drift, the probe reads the filesystem + status table.
-4. Read `PROJECT-PLAN.md` — find the first `🔲 Open` task; that's your starting point
-5. Scan `skills/README.md` — prime trigger matching for the session's tasks
-6. If the user's message names a specific task or block, also load matching skills
+1. `PROJECT-STATUS.md` — done / in-progress / blockers; its "Current Focus" note is authoritative for resuming (don't use git log).
+2. `PROJECT-CONTEXT.md` — accumulated wiki knowledge (skip if absent).
+3. `node tools/quality/project-state.mjs` (`quality-tooling`) — ground-truth frozen / changed / content state; prefer it over inferring from prose.
+4. `PROJECT-PLAN.md` — the first `🔲 Open` task is your starting point.
+5. Scan `skills/README.md`; load skills matching the session's tasks (and any the user's message names).
 
-## What NOT to do at startup
-- Don't re-read files you just read in the same session
-- Don't propose a plan if one already exists in `PROJECT-PLAN.md` — execute it
-- Don't ask what to work on if `PROJECT-PLAN.md` has open tasks — start the first one
-
-## State recovery (when context has been compressed)
-1. Check `PROJECT-PLAN.md` — find the last completed task and the next open one
-2. Check `PROJECT-STATUS.md` — the "Current Focus" note (authoritative; don't use git log)
+Don't: re-read files you just read; propose a plan when one already exists; ask what to work on when open tasks exist — start the first.
 
 ## Pitfalls
-- Starting work without reading `PROJECT-PLAN.md` — you'll duplicate or skip tasks
-- Reading `AGENTS.md` but not `PROJECT-STATUS.md` — AGENTS.md doesn't tell you what's broken now
+- Starting without reading `PROJECT-PLAN.md` — you'll duplicate or skip tasks.
+- Reading `AGENTS.md` but not `PROJECT-STATUS.md` — it doesn't tell you what's broken now.
 
-See also: `executing-plan-tasks` (how to pick up and execute the first open task), `writing-plan-tasks` (how to create new tasks from user requests)
+See also: `executing-plan-tasks` (pick up and execute the first open task), `writing-plan-tasks` (create tasks from requests), `bootstrap-project` (uninitialized project).

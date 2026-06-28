@@ -16,7 +16,7 @@ export default function parse(element, { document }) {
   const scope = h1.closest('main') || document;
   const planList = [...scope.querySelectorAll('ul')]
     .find((ul) => ul.querySelector(':scope > li h2'));
-  if (!planList) return;
+  if (!planList) return null;
 
   // Consume the whole title+toggle+plans block: the common ancestor of h1 + planList.
   let container = planList;
@@ -48,7 +48,12 @@ export default function parse(element, { document }) {
       .map((l) => (l.getAttribute('aria-label') || l.textContent).replace(/[[\]x☐☑✓]/g, '').replace(/\s+/g, ' ').trim())
       .map((label) => label.replace(/\s*save up to[^,]*$/i, '').trim())
       .filter((label) => /^(monthly|annually|annual)$/i.test(label))
-      .filter((label) => { const k = label.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; });
+      .filter((label) => {
+        const k = label.toLowerCase();
+        if (seen.has(k)) return false;
+        seen.add(k);
+        return true;
+      });
   }
   // Lazy-hydration fallback: the periodicity group is client-rendered and its
   // labels vary at import parse time. The two periods are stable, so default to

@@ -38,7 +38,7 @@ Read the **site-default fidelity** from `PROJECT-DESIGN.md` (**first-match-wins*
 - **Refined** — keep the brand's identity (its colors, its type voice, its spatial feel) but **regularize** it: snap an uneven type scale to a clean ratio, unify near-duplicate spacings into one system, raise body contrast to ≥4.5:1, give links/buttons consistent states. The source is a strong reference; the foundation is the source *done right*.
 - **Reimagined** — keep the essence and the strongest concepts, rebuild the system to be graphically excellent. Most freedom, but still on-brand and still rock-solid.
 
-At all three levels the result must be graphically solid — fidelity is *how close to the source*, never *how much craft*. **At Refined or Reimagined, load `craft-floor` and clear every threshold in it** (type-scale ratio, no-twin-sizes, distinct links, one spacing scale, focus + reduced-motion). At Faithful, skip the craft floor and mirror the source.
+At all three levels the result must be graphically solid — fidelity is *how close to the source*, never *how much craft*. At Refined or Reimagined, clearing `craft-floor`'s thresholds (type-scale ratio, no-twin-sizes, distinct links, one spacing scale, focus + reduced-motion) is mandatory; at Faithful, skip the craft floor and mirror the source.
 
 ## Formalize into the foundation
 1. **Write the tokens** into the project's global style files (brand colors/fonts, type scale, spacing, layout caps) — read the project's token files from `PROJECT-DESIGN.md`'s "Token Files" table.
@@ -61,4 +61,10 @@ Success criteria, all checkable:
 - Styling blocks before the workbench exists — blocks then fight the foundation you add later. Foundation first.
 - Eyeballing values instead of measuring — load `measure-then-implement`.
 
-See also: `craft-floor` (thresholds to clear at Refined/Reimagined fidelity), `migration-orientation` (sets the fidelity this skill reads), `eds-migration-process` (foundation before blocks), `vertical-spacing-system` (spacing half of the foundation), `eds-content-patterns` (default-content auto-styles), `measure-then-implement` (measure the source, don't guess), `styling-additively` (per-block styling after this). Native `excat-complete-design-expert` — this skill adds the Workbench-Before-Tools gate, fidelity-conditional craft floor, and cross-page gist extraction.
+## Provision tokens on demand, not upfront
+Don't define system-vocabulary tokens (`--space-3xl`, `--z-*`, `--block-padding`) before a consumer exists — add a token when the first rule needs it. `detect.mjs`'s `craft-token-unused` (in `--all` mode) flags orphans; prune them at `session-close`. A foundation full of unused tokens is speculative complexity, not a system.
+
+## At a no-render milestone, orient the user
+Foundation/analysis stages render nothing — which disorients even experts ("should I restart?"). Close such a stage by: (1) **reassuring** that nothing renders yet and why (the workbench precedes any block — `eds-migration-process`); (2) naming what **is** reviewable now — the `PROJECT-DESIGN.md` tokens, and the styleguide's default-content + first blocks if `styleguide-generator` ran; (3) offering 1–2 concrete next prompts ("review the tokens, or shall I import the first page?").
+
+See also: `craft-floor` (thresholds to clear at Refined/Reimagined fidelity), `migration-orientation` (sets the fidelity this skill reads), `eds-migration-process` (foundation before blocks), `vertical-spacing-system` (spacing half of the foundation), `eds-content-patterns` (default-content auto-styles), `measure-then-implement` (measure the source, don't guess), `styling-additively` (per-block styling after this), `styleguide-generator` (build the living reference once the foundation is set; reviewable at this no-render stage). Native `excat-complete-design-expert` — this skill adds the Workbench-Before-Tools gate, fidelity-conditional craft floor, and cross-page gist extraction.

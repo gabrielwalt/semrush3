@@ -5,6 +5,13 @@ description: EDS nav/header patterns. Use when header is broken, nav is invisibl
 
 Nav uses `aria-expanded='true'` on desktop (set by `toggleMenu` on init). Mobile CSS (`nav[aria-expanded='true'] .nav-sections { display: block }`) applies on desktop too unless you match that specificity in media queries.
 
+## Fragment paths — published ROOT, never `/content/`
+`header.js`/`footer.js` fetch the nav/footer fragment at the **published site root** — `/nav.plain.html`, `/footer.plain.html` — which is correct in BOTH `aem up` (serves `content/` at root) and published EDS.
+- **Match-and-refuse:** about to write (or an orchestrator emitted) `/content/nav` or `/content/footer` — in `head.html` nav/footer meta, a fragment ref, or a fetch path? **Stop.** `/content/…` 404s at the EDS root. Correct `head.html` state = **no nav/footer meta** (stock default → `/nav` `/footer`) or an explicit `/nav` / `/footer`. (AGENTS.md NEVER list; the guard hook + `publish-readiness.mjs` flag a `/content/` value.)
+- **Upstream note:** native `excat-navigation-orchestrator` is correct (root); native `excat-footer-orchestrator` emits the `/content/footer` model (wrong). Don't reimplement the orchestrators — if the footer one wrote `/content/`, fix the `head.html` meta to root and flag the upstream bug.
+- A missing fragment **throws** (header/footer don't null-guard) — intentional, fail-loud for debugging; fix the path, never add a fallback (`eds-code-conventions`).
+- **Footer structure:** don't give a footer fragment's structural wrapper divs a **block class** — EDS block-decorates them (404 for the missing `<class>.js`/`.css`, or `visibility:hidden`), which tempts no-op `decorate(){}` stubs. **Model footer columns as sections + Section Metadata**; structural wrappers stay plain divs. The stock `footer.js` only loads + appends the fragment — no per-column JS, no stubs (`eds-content-modeling` No-JS-Reconstruction; `post-import-sectionizer`).
+
 ## Quick fixes
 | Symptom | Cause | Fix |
 |---------|-------|-----|
@@ -67,4 +74,4 @@ Use the project's desktop breakpoint (see `PROJECT-DESIGN.md`) for the media que
 - Mobile: `closeOnFocusLost` fires with `e.relatedTarget === null` on tap — `nav.contains(null)` returns false, incorrectly closing menu. Fix: `if (!isDesktop.matches) return;` at top of `closeOnFocusLost`
 - Mobile click delegation: nav item click handlers must guard against mega-panel clicks with `if (e.target.closest('.nav-mega-panel')) return;` — otherwise clicking headings, text, or list items inside panels bubbles up and closes the menu
 
-See also: `vertical-spacing-system` (sticky/overflow rule), `interaction-states-eds` (dropdown overflow-clipping + hover-vs-touch + focus states)
+See also: `vertical-spacing-system` (sticky/overflow rule), `interaction-states-eds` (dropdown overflow-clipping + hover-vs-touch + focus states), `debug-eds-publish` (nav/footer 404 or blank after publish), `eds-dom-structure` (visibility-reveal lifecycle behind a blank nav/footer)
