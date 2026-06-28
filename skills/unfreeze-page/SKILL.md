@@ -29,5 +29,6 @@ After the changes are validated by the user (GATE 2 re-run — the user explicit
 - Assuming a selector change is safe because it "looks" scoped — run `project-state.mjs` and check `frozen[]` first.
 - Forgetting to re-freeze after the user re-validates — the page stays `🔓` indefinitely and loses Frozen-Tools protection.
 - Over-scoping with variants when it's not needed — unnecessary variants pollute the block inventory.
+- Treating styleguide edits as frozen work — the styleguide is **never frozen** (the Styleguide-Never-Freezes Rule in `styleguide-generator`); adding a block page/story to it needs no unfreeze. Only editing a *block's shared CSS/JS* triggers this protocol, regardless of whether that edit was prompted by styleguide or page work.
 
 See also: `regression-guard` (catches a shared tool shifting under a frozen page), `styling-additively` (the additive discipline that avoids unfreezing in the first place), `validation-gates` (the GATE 2 re-validation that gates re-freezing), `quality-tooling` (`project-state.mjs` `frozen[]`)

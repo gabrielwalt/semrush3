@@ -53,3 +53,11 @@ Block + variant + section-style inventory; one-off registry.
 ## One-offs
 
 *[Agent: record one-off registrations here.]*
+
+## Author block library
+
+DA Library-panel sources authored 2026-06-28 (see `PROJECT-IMPORT.md` → Author block library, and `author-library-setup`): `content/library/blocks/<block>.plain.html` (11 clean demo pages, one instance per real variant) + `block-library.json` (site-root blocks list). Distinct from the styleguide (developer-exhaustive) — the library is the author's clean insertable set. Keep both in lockstep with the table above. Config row at `admin.da.live/config/.../` is a pending user handoff.
+
+## Styleguide
+
+Living styleguide authored 2026-06-28 under `content/styleguide/` (net-new authored pages, not imported). Mirrors this inventory — when a block/variant/section-style is added or changed, update its styleguide story in the same step (the Styleguide-Mirrors-Inventory Rule). Render route: `/content/styleguide/<path>`. Pages: index, default-content, sections (hero/dark/light/flush), and one page per block under `blocks/` (each covering its variants + meaningful content-edge-case stories). Kept out of site nav/sitemap.

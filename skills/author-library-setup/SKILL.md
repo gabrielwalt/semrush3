@@ -1,0 +1,101 @@
+---
+name: author-library-setup
+description: How to create and maintain the author-facing block library for the two EDS authoring models — the DA (da.live) Library panel and the UE/CrossWalk component definition. Load when wiring up or updating a project's block library/component definition, when the styleguide gains a new block or variant (its twin must track it), or when deciding what belongs in the author palette vs the developer styleguide.
+---
+
+The author-facing library is what an author browses to **insert** a block: **DA → the Library panel**; **UE/CrossWalk → the component definition JSON**. It is the twin of the developer styleguide (`styleguide-generator`, the Styleguide-Twins-The-Library Rule) but holds a **different, smaller set** — one clean exemplar per block + its meaningful variants, never default content, the section-style page, or edge-case/overflow stories. Build/update it in the same step a new block or variant is validated; an edge-case story alone needs no library change.
+
+## DA (da.live) — config sheet + dedicated demo pages
+
+DA's editor has a built-in **Library panel** with four OOTB categories: `blocks`, `templates`, `icons`, `placeholders` (+ `aem-assets` if an AEM Assets repo is configured). Two surfaces, with **different owners**:
+
+**A. The `library` config sheet — USER-OWNED, agent can't write it.** Lives in the DA **site config** at `https://admin.da.live/config/{org}/{site}/` (a multi-sheet workbook; the panel reads the sheet named `library`). This endpoint is **auth-gated — a plain fetch returns 401**, so the agent does NOT create it. Hand the user the exact row to add. Verified column schema (from da-live source, `da-library/helpers/helpers.js`):
+
+| Column | Meaning |
+|--------|---------|
+| `title` | Display name AND plugin identity — lowercased+hyphenated to match an OOTB name. For the blocks plugin it MUST be `Blocks` (→ `blocks`); likewise `Templates`/`Icons`/`Placeholders`. Any other title = a custom plugin. |
+| `path` | Comma-separated source path(s). Relative `/…` resolves to `https://{ref}--{repo}--{org}.aem.live{path}` (or `http://localhost:3000{path}` when `ref=local`). |
+| `ref` | Branch gate — `main` (always shown), `local`, or a branch name (shown only when the editor's `?ref=` matches). Default `main`. |
+| `experience` | OOTB plugins ignore it; custom plugins default `inline`. |
+| `format` | Optional, for icons/placeholders only (`:<content>:` / `{{<content>}}`). |
+| `icon` | Custom plugins only; OOTB plugins set their own. |
+
+There is **no `name` column** (that was wrong) and **no `/.da/config` content path** — it's the admin config endpoint above.
+
+**B. The blocks-list source + demo pages — AGENT-OWNED, in the code repo.** The `path` points at a JSON list of blocks the agent maintains in-repo (e.g. `/block-library.json`, served at the site root). Shape: a sheet (single- or multi-sheet) whose rows are **`name` (author-facing label) + `path` (the block's demo page)**.
+
+- **Variants are auto-derived by parsing the demo page's `.plain.html`: EVERY block instance (section) becomes one author variant**, named by its **preceding heading** else its **CSS class** (first class = base name, extra classes = variant modifiers). `library-metadata` after a block populates its `tags`/`description`.
+- **⚠ Therefore the developer styleguide CANNOT double as the library source** — its multiple edge-case "Story:" instances would each surface as a bogus author variant. Author **dedicated clean demo pages** under `content/library/blocks/<block>` — **one instance per *real* variant, no story/edge-case headings** (let DA name variants from the CSS class: `teaser`+`teaser-dark`, `carousel`+`carousel-articles`+`carousel-quotes`).
+- These demo pages are net-new authored reference content (like the styleguide) — exempt from *content = import script*; the guard hook allows `content/library/**` (and `content/styleguide/**`).
+- **No build step, no code** — content (clean demo pages) + one in-repo JSON + the user-added config row. Demo pages must be **published** before the panel can fetch them.
+
+## UE / CrossWalk — the component-definition JSON trio
+
+There is **no demo-doc library**; the author's palette IS three JSON files (the markup is a fixed contract consumed by `helix-html2md` — no custom markup):
+
+| File | Role | Key shape |
+|------|------|-----------|
+| `component-definition.json` | **Palette** — which blocks an author can add | entry: `title`, `id`, `plugins.xwalk.page` (`resourceType: core/franklin/components/block/v1/block`, `template.name`, `template.model`) |
+| `component-models.json` | **Editable fields** per block | `id` + `fields[]` (each `component` e.g. `text`/`richtext`/`reference`/`select`, with `name`/`label`/`valueType`) |
+| `component-filters.json` | **Containment** — which components allowed in which container/section | `filterId` → allowed children |
+
+- **Variants** are usually `classes_*` options on the model (`classes_background`, `classes_fullwidth`), NOT new palette components.
+- **Field conventions:** *field collapse* (`image` + `imageAlt` → one picture via suffix), *element grouping* (`teaserText_title` concatenates semantic elements into one cell).
+- **Containers** are two-dimensional (hold children of a model); filters gate what goes inside.
+- These root files are commonly assembled from per-block partials via the xwalk build tooling — load `excat-xwalk-expert` for the JCR/JSON mechanics and the exact build command.
+
+## Recipe (maintain in lockstep with the styleguide)
+1. Detect the authoring model (`PROJECT-DESIGN.md` #1 — DA vs UE).
+2. **DA, first time:** create the agent-owned half — a dedicated `content/library/blocks/<block>` demo page per block (one clean instance per real variant) + an in-repo blocks-list JSON at the site root listing `name`+`path`. Then hand the user the one `library` config row to add at `admin.da.live/config/{org}/{site}/` (the agent can't write the 401-gated config). **UE, first time:** create the three JSON files.
+3. New block validated → DA: add a clean demo page + a JSON row; UE: add an entry across all three JSON files.
+4. New variant validated → DA: add ONE clean instance of it to that block's demo page (named by CSS class); UE: add a `classes_*` option to the model (not a new component).
+5. Keep the author set CLEAN — one instance per block + real variants; exclude default content, section-style comparisons, overflow/edge-case stories.
+6. Record the library location/config + the user handoff step in `PROJECT-IMPORT.md` or `PROJECT-DESIGN.md` so the next session finds it.
+7. **On first creation, hand the user clear step-by-step instructions** (the Library-Handoff Rule below). Don't leave the last mile to a non-expert.
+
+## The Library-Handoff Rule — guide the user through the parts the agent can't do
+
+**When a library is freshly created, the agent MUST end by giving the user explicit, ordered, copy-pasteable instructions for the steps only they can perform.** The agent owns the in-repo artifacts (demo pages + blocks-list JSON / the UE JSON trio); the user owns publishing and the two pieces of configuration below. The user may not be a domain expert — name each click, each field, and the exact value. Assume nothing.
+
+For a **DA** project, the handoff has three parts — give all three, in order:
+
+1. **Publish the library content.** List the exact paths the user must preview+publish so the panel can fetch them: the blocks-list JSON (e.g. `/block-library.json`) and every `content/library/blocks/*` demo page. State plainly: *until these are published, the Library panel will be empty.*
+2. **Add the DA config row** (the 401-gated `library` sheet the agent can't write). Tell the user to open `https://admin.da.live/config/{org}/{site}/`, go to the **`library`** sheet (create it if absent), and add a row with the exact cell values — for the blocks plugin: `title=Blocks`, `path=/block-library.json`, `ref=main`. Spell out the column names and values; don't assume they know the schema.
+3. **Set the EMA "Library url" in Settings — this is a SEPARATE mechanism, read mainly by the agent, not the DA panel.** The Experience Modernization Agent console has a **Settings → Project → "Library url"** field (Save button). It is the **project's reuse substrate**: the excatops MCP fetches it for block *discovery* (`get_library_catalog`, `search_blocks`, `get_block_details`, `get_block_examples`) and block *reuse* (`get_vanilla_block_code` pulls a block's `.js`/`.css` + its `_<block>.json` model from the library origin). It is **not** the DA Library panel config (part 2) — different artifact, different consumer; a project can have both.
+
+   **Exact format (authoritative — `excatops` enforces it):**
+   - A **valid absolute URL** to a **published** Sidekick block-library manifest: `https://<ref>--<repo>--<owner>.aem.page/tools/sidekick/library.json` (zod `.url()`; not localhost, not relative).
+   - **Schema the catalog tools require:** top-level **`{ "data": [ … ] }`** (else `sidekick-library-tools.js` throws *"Invalid library.json schema: expected 'data' array."*). Each `data` entry carries a block **path** (e.g. `/block-collection/cards`); the tool fetches `${origin}${blockPath}.plain.html` and reads `<div class="library-metadata">` for each block's `name`/`blockName` + `description`.
+   - **Origin vs full URL:** the *code* tools only use `url.origin` (then fetch `${origin}/blocks/<name>/_<name>.json` + the block `.js`/`.css`), so they tolerate a bare origin — but the *catalog* tools need the full `…/tools/sidekick/library.json`. **Always give the full `.../tools/sidekick/library.json` form — it satisfies both.**
+   - **It usually points at a SEPARATE library project, not this site.** Defaults by project type: da/doc → `https://main--sta-boilerplate--aemdemos.aem.page/tools/sidekick/library.json`; xwalk → `https://main--sta-xwalk-boilerplate--aemysites.aem.page/tools/sidekick/library.json`. A customer may specify their own library — **follow the user's direction over the default.**
+   - **Resolution chain:** stored in `.migration/project.json` under `sites["<site>"].libraryUrl`; written by the **`excat-project-expert`** sub-agent at setup; read by excatops `getProjectLibraryUrl()` (falls back to the type default if unset). If a code tool errors *"no libraryUrl is set…"*, the fix is to run `excat-project-expert` to populate `project.json`.
+
+   ⚠ **So the DA blocks-list JSON you build in part 2 (e.g. `/block-library.json`) does NOT satisfy this field** — different path (`/tools/sidekick/library.json`) and schema (`{data:[…]}` with `library-metadata` per block). If you want THIS project's own blocks to be the EMA reuse source (rather than the shared STA boilerplate), you must publish a conforming `/tools/sidekick/library.json`. Otherwise leave the field at the boilerplate default and tell the user what it points at.
+
+### Building THIS project's own EMA `library.json` (when the user wants own-blocks reuse — verified recipe)
+1. **One manifest** at `tools/sidekick/library.json` in the code repo (served at `/tools/sidekick/library.json`): top-level `{ "data": [ { "name": "<Label>", "path": "/library/blocks/<block>" }, … ] }`. NOT per-block JSON, NOT a multi-sheet workbook — `getLibraryCatalog` reads `catalog.data` directly.
+2. **Variations come from `library-metadata`, not block instances** (this is the EMA catalog, different from the DA panel's instance-parsing). In each demo page, after each block instance add `<div class="library-metadata"><div><div>name</div><div>Label</div></div><div><div>description</div><div>…</div></div></div>`. `parseLibraryMetadata` splits on `library-metadata` and reads `name` (DA) or `blockName` (xwalk) + `description`. A block with N real variants = N `library-metadata` blocks on its page (e.g. teaser → "Teaser" + "Teaser (dark)").
+3. **`path` resolves against `url.origin`** → the tool fetches `${origin}/library/blocks/<block>.plain.html`. Keep paths relative-from-root in the manifest; the published origin supplies the host.
+4. **Reuse the same `content/library/blocks/*` demo pages** the DA panel uses — adding `library-metadata` serves both mechanisms from one set of pages.
+5. **Verify before claiming done** by running the real parser, not by eye: `import { parseLibraryMetadata } from '<excat>/tools/excatops-mcp/src/tools/sidekick-library-tools.js'`, fetch each demo `.plain.html`, assert the variant names. (The dev server serves these at `/content/library/blocks/<block>.plain.html`.)
+6. **Expected, harmless:** `library-metadata` is an unknown EDS block, so a direct render logs a 404 `/blocks/library-metadata/…` and shows the metadata as visible text. This is fine — the **canonical STA boilerplate library keeps `library-metadata` in its served `.plain.html` too**; the sidekick-library UI (and the EMA string-parser) consume it; these pages aren't browsed directly. Do NOT try to strip it to silence the 404 — that would break EMA discovery.
+
+For a **UE/CrossWalk** project, the equivalent handoff is: commit + deploy the JSON trio, and (if applicable) set the same EMA **Library url** Settings field; defer the JCR/build specifics to `excat-xwalk-expert`.
+
+Present the handoff as a short numbered checklist the user can follow top-to-bottom, and confirm what they'll see when it works (the blocks appearing in the editor's Library panel). Re-state it briefly whenever the library is first wired up, not only the first time it's built.
+
+## Pitfalls
+- Treating the styleguide and library as one artifact — same trigger (new block/variant), different contents (developer-exhaustive vs author-clean).
+- **DA: pointing the library at the styleguide demo pages** — DA turns every block instance on the page into an author variant, so the styleguide's edge-case "Story:" instances become bogus variants. Use dedicated clean `content/library/blocks/**` pages (one instance per real variant).
+- **DA: trying to create/write the `library` config row yourself** — `admin.da.live/config/{org}/{site}/` is 401-gated (user-owned). The agent owns the demo pages + the in-repo blocks-list JSON; hand the user the exact config row.
+- **DA: using a `name` column or a `/.da/config` content path in the config row** — neither exists; the columns are `title`/`path`/`ref`/`experience`/`format`/`icon`, and the blocks plugin's `title` must be `Blocks`.
+- DA: an absolute (`https://…`) `path` that won't resolve across environments — use a relative `/…` path.
+- DA: claiming the library works without **publishing** the demo content first — the panel fetches the published source.
+- UE: adding a palette entry in `component-definition.json` but forgetting its `component-models.json` fields or `component-filters.json` placement — the block appears but can't be edited or placed.
+- UE: minting a new component for what is really a variant — use `classes_*` on the existing model.
+- Pushing edge-case/overflow stories into the author library — they belong to the developer styleguide only.
+- **Building the library and stopping** without handing the user the publish + DA-config + EMA Settings steps — the in-repo artifacts alone don't make the panel work; the user-owned last mile must be spelled out (the Library-Handoff Rule).
+- **Conflating the EMA "Library url" with the DA Library panel** — they are two mechanisms. The DA panel (part 2: config sheet + blocks-list JSON) lets *authors* insert blocks in the DA editor; the EMA "Library url" (part 3: a `…/tools/sidekick/library.json` with `{data:[…]}`) is the *agent's* reuse/discovery substrate via excatops, and usually points at a shared boilerplate library, not this site. Don't paste a DA blocks-list URL into the EMA field — wrong path + schema.
+- **Pointing the EMA field at a non-`/tools/sidekick/library.json` URL or a non-`{data:[…]}` JSON** — the catalog tools throw *"Invalid library.json schema: expected 'data' array."* Use the full published `…/tools/sidekick/library.json`.
+
+See also: `styleguide-generator` (the twin; the Styleguide-Twins-The-Library Rule + audience split), `migration-orientation` (#10 — if blocks already exist with a library, this is moot; the reuse/mutation bar governs instead), `eds-content-modeling` (block vs variant vs section-style — what earns a library entry), `excat-xwalk-expert` (UE JCR/JSON build mechanics), `excat-ui-tour` (where the EMA Settings → Project → Library url field lives), `session-close` (the drift check that catches a library lagging the styleguide).

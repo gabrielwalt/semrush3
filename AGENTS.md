@@ -76,7 +76,7 @@ A migrated project **will be published to EDS**, where content serves at the **s
 - ⛔ **Never edit `scripts/aem.js`** (or any upstream lib file) — it's overwritten on the next lib update. Customize in `scripts/scripts.js`. → `eds-code-conventions`
 - ⛔ **Never use a `/content/…` absolute path** anywhere code- or author-visible (nav/footer meta, links, fragment refs) — EDS serves at the **site root**. → `nav-header-eds`
 - ⛔ **Never set `head.html` `nav`/`footer` meta to `/content/…`** — leave the default (root) or use `/nav` `/footer`. → `nav-header-eds`
-- ⛔ **Never write `content/*.plain.html` directly** — go through the import script (see *Content structure = import script*). *Sole exception: `content/styleguide/` — net-new authored reference pages (`styleguide-generator`).*
+- ⛔ **Never write `content/*.plain.html` directly** — go through the import script (see *Content structure = import script*). *Exceptions: `content/styleguide/` (`styleguide-generator`) and `content/library/` (`author-library-setup`) — net-new authored reference pages.*
 - ⛔ **Never run `git` / commit / push / publish** — the user does it via the Console (see *No Git, no AEM pushes*).
 - **Never author structure as nested `<div>`s or with author `class`/`id`/`style`/`data-*`** — the pipeline strips them. Model structure as **top-level sections + Section Metadata or table-blocks**. → `eds-content-modeling`, `eds-dom-structure`
 - **Never reconstruct lost structure in JS** (no content-signature tagging, no hardcoded column counts) — re-model it in content. → `eds-content-modeling`

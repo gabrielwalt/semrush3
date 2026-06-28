@@ -77,4 +77,17 @@ Single site-wide set: **768px** (tablet) and **1024px** (desktop). The foundatio
 
 ## Block Inventory
 
-*[Agent: record blocks/variants/section-styles as they are validated.]*
+See `PROJECT-BLOCKS.md` for the full block/variant/section-style inventory.
+
+## Styleguide
+
+A living styleguide was created retrospectively 2026-06-28 (the project skipped it at the start). It is a set of net-new authored reference pages under `content/styleguide/` that render every default-content element, the four section styles, and every block × variant through the real decoration — the GATE-2 diff target and the reviewable artifact at no-render stages. It is intentionally kept out of site nav/sitemap (internal reference). It must stay in lockstep with `PROJECT-BLOCKS.md` (the Styleguide-Mirrors-Inventory Rule): when a block/variant/section-style is added, add its story the same step.
+
+| Page | Renders |
+|------|---------|
+| `/styleguide` | Index + CTA/button legend (primary/secondary/accent) |
+| `/styleguide/default-content` | Every semantic element + the three button variants |
+| `/styleguide/sections` | hero / dark / light / flush on the same sample content |
+| `/styleguide/blocks/<block>` | One page per block, with meaningful stories (edge cases, variants, counts) — 11 block pages covering all 11 blocks + the teaser-dark, carousel-articles, carousel-quotes variants |
+
+Local render route: `/content/styleguide/<path>` (clean, no `.html`).

@@ -4,12 +4,15 @@ Import strategy, URL sets, parser strategy, template-to-parser mapping.
 
 ## Import Strategy
 
-DA project (`content.da.live/gabrielwalt/semrush3/`). Single-page scope — the homepage. ONE generic marker-driven parser reproduces the validated structure (`marker-driven-import`).
+DA project (`content.da.live/gabrielwalt/semrush3/`). Scope expanded 2026-06-28 from single-page → **template-driven multi-page** (see `PROJECT-TEMPLATES.md`: one chrome, six canonical templates). Each template gets ONE generic marker-driven parser; pages of the same template fan out through it (`marker-driven-import`). **Wave 1 = pricing siblings + modern marketing-landings only** (T-008…T-011); all other templates deferred (T-D01…T-D03).
+
+Automation principle: a template's parser is written/validated once against its reference page, then **fanned out across all sibling URLs via one bulk import** — the per-page cost is a URL line + a sectionize pass, not new code. The pricing template is the cleanest case: 9 siblings, one frozen parser, data-only differences.
 
 ## URL Sets
 
-- Homepage: `https://www.semrush.com/`
-- Pricing: `https://www.semrush.com/pricing/seo/` (`/pricing/` redirects here)
+- Homepage: `https://www.semrush.com/` (marketing-landing reference)
+- Pricing: `https://www.semrush.com/pricing/seo/` (`/pricing/` redirects here) — **+ 8 siblings** to fan out: `/pricing/{semrush-one,ai,traffic-and-market,local,content,social,advertising,pr,enterprise}/`
+- Marketing-landing wave 1: `/semrush-free-trial/` (reference), `/solutions/*` (redirects to trial LP), `/company/` (about)
 
 ## Pricing page content model (T-005 — reuse-first against frozen homepage toolbox)
 
@@ -84,3 +87,23 @@ node tools/importer/sectionize.mjs content/index.plain.html
 `tools/importer/sectionize.mjs` splits the flat stream into one top-level `<div>` per block group, keeping each block's eyebrow/heading default content with it. The hero parser emits `Section Metadata → Style: hero`; the boilerplate's `decorateSections` doesn't read Section Metadata, so `decorateSectionMetadata()` in `scripts/scripts.js` consumes it into a `.hero` section class (runs in `decorateMain` right after `decorateSections`). This lives in `scripts.js`, NOT `aem.js` — `aem.js` is the upstream-managed library and edits get overwritten on lib updates (per `eds-code-conventions`).
 
 **Always back up `content/index.plain.html` before re-running** — the importer overwrites it.
+
+## Author block library (DA Library panel) — built 2026-06-28
+
+Wires the project's blocks into DA's in-editor **Library panel** so authors can insert them. Two halves (see `author-library-setup`):
+
+- **Agent-owned (in repo, done):**
+  - `content/library/blocks/<block>.plain.html` — 11 dedicated **clean** demo pages, one instance per *real* variant (teaser+teaser-dark; carousel+carousel-articles+carousel-quotes; others single). NOT the styleguide pages — DA derives one author variant per block instance, so the styleguide's multi-story pages would leak bogus variants.
+  - `block-library.json` (site root) — the blocks-list source: rows of `name` + `path` (→ `/library/blocks/<block>`). Maintain in lockstep with `PROJECT-BLOCKS.md` (Styleguide-Twins-The-Library Rule).
+- **User-owned (handoff — NOT done; agent can't write it):** add one row to the DA site config at `https://admin.da.live/config/gabrielwalt/semrush3/` (401-gated), sheet **`library`**: `title=Blocks`, `path=/block-library.json`, `ref=main`. Then **publish** `block-library.json` + the `content/library/**` pages so the panel can fetch them.
+
+### EMA "Library url" (agent reuse substrate) — own-blocks library built 2026-06-28
+
+Separate from the DA panel (different consumer: the excatops MCP for block discovery/reuse; see `author-library-setup` + memory `ema-library-url`). The user chose to make THIS site's blocks the EMA reuse source rather than the shared STA boilerplate.
+
+- **`tools/sidekick/library.json`** (served `/tools/sidekick/library.json`) — single manifest, top-level `{data:[{name,path}]}`, 11 blocks → `/library/blocks/<block>`.
+- Each `content/library/blocks/*` demo page now carries a **`library-metadata`** block per real variant (name + description) — verified against the real excatops `parseLibraryMetadata`: teaser→2, carousel→3, others→1.
+- Demo pages serve both the DA panel AND the EMA catalog (one set of pages). `library-metadata` renders as visible text + logs a harmless `/blocks/library-metadata` 404 on direct view — expected; the canonical STA boilerplate keeps it in `.plain.html` too. Do NOT strip it.
+- **User handoff (NOT done):** publish `/tools/sidekick/library.json` + `content/library/**`, then set EMA **Settings → Project → Library url** to `https://main--semrush3--gabrielwalt.aem.page/tools/sidekick/library.json` and Save.
+
+When a new block/variant is validated: add its clean demo page (or a variant instance) + a `block-library.json` row + a `library.json` `data[]` entry + a `library-metadata` block, in the same step the styleguide is updated.

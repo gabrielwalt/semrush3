@@ -54,11 +54,35 @@ For fidelity: inspect the source first, then assert — don't offer a menu.
 
 | # | Input | Default if not stated |
 |---|-------|-----------------------|
-| **10** | **Reuse** — existing EDS block library, design system, or prior project blocks to reuse? | None |
+| **10** | **Existing blocks & the reuse bar** — does a block library / design system / prior project blocks already exist for this site, and **where does the user set the reuse bar**? See *The Existing-Blocks Interview* below — this is a multi-part question, not a one-liner. | None exist → build fresh (then #13 styleguide + the block library go together) |
 | **11** | **Per-page fidelity overrides** — any page/template with a different fidelity than the site default? | None |
 | **12** | **Constraints** — strict brand rules, pages flagged as off-limits, accessibility bar, templates to avoid copying, anything the agent must not touch or change? | None |
 
 ---
+
+## The Existing-Blocks Interview (input #10 — never skip when blocks may exist)
+
+**The Reuse-Bar Rule.** Before any styling, you MUST know whether the project already has blocks AND exactly how freely you may touch them — guessing the bar wrong either reinvents blocks that existed or mutates blocks that were off-limits. This is assert-then-confirm, 2–3 questions, then wait.
+
+Run this whenever the user mentions existing blocks, a design system, or a prior project — or whenever the `blocks/` dir holds more than the stock boilerplate. Three parts, in order:
+
+**1. Do existing blocks exist for this site?** Don't take "yes" at face value — **verify against the repo**. If the user says yes but `blocks/` contains **only the default aem-boilerplate blocks** (e.g. `cards`, `columns`, `hero`, `fragment`, `header`, `footer` and nothing project-specific), the real blocks live elsewhere — **you MUST ask where to get them from** (which repo / branch / URL / package) and how to bring them in. Never proceed to style as if they're present when they aren't.
+
+**2. To what extent should existing blocks be used?** (the reuse bar — give each its consequence)
+- **Existing-only** — use ONLY existing blocks; if some imported content has no matching block, flag it and ask rather than inventing. *Consequence:* maximum consistency, but some source content may not map cleanly — you'll surface gaps for the user to decide.
+- **Reuse-when-fits, add-when-needed** *(common default)* — reuse an existing block wherever it fits; add a new block only when no existing one matches the imported content. *Consequence:* balances consistency with coverage; the block set grows only where the source genuinely needs it.
+- **Loose reference** — existing blocks are a starting point, free to add/replace liberally. *Consequence:* fastest coverage, least guaranteed consistency.
+
+**3. How frozen are the existing blocks?** (the mutation bar — ask explicitly; this is where the user sets the line)
+Establish, per block set, which of these is permitted — from most to least locked:
+- **Frozen** — do not touch their CSS/JS at all; compose only (Frozen-Tools Rule applies from day one).
+- **Restyle-allowed** — their styling may be adjusted to better fit the imported site's brand.
+- **Variants-allowed** — base styles stay, but you may add variants.
+- **Template-scoped styling-allowed** — you may style them specifically for certain templates/pages without changing the base.
+
+Capture the answer at the granularity the user gives (whole library vs per-block). Record it in `PROJECT-DESIGN.md` (#10) and reflect frozen blocks in `PROJECT-BLOCKS.md` / `PROJECT-STATUS.md` so the Frozen-Tools machinery (`unfreeze-page`, `project-state.mjs`) sees them.
+
+**If no existing blocks** → you're building fresh: the styleguide (#13) and the author-facing **block library / component definition** are created together and maintained in lockstep (`styleguide-generator`).
 
 ## Authoring model implications
 
@@ -105,5 +129,7 @@ Orientation sets direction. It does not import, style, or commit anything itself
 - Treating Reimagined as lower quality — it is *freer of the original*, not lower craft.
 - Recording a single fidelity and forgetting per-page overrides — a weak legacy template copied Faithfully drags the whole migration.
 - Assuming no additional resources without asking — a Figma file found in Round 2 can save days.
+- Taking "we have existing blocks" at face value when `blocks/` holds only stock boilerplate — the real blocks are elsewhere; ask where to get them (the Reuse-Bar Rule, part 1).
+- Styling or composing with existing blocks before the mutation bar is set — frozen vs restyle vs variants-only vs template-scoped changes what you're allowed to do.
 
-See also: `global-style-foundation` (next step), `styleguide-generator` (if #13 yes — scaffold after the foundation), `eds-migration-process` (full workflow this gates), `import-content-scoping` (URL triage for full-site scope), `excat-xwalk-expert` (if XWalk), `measure-then-implement` (Faithful means measure).
+See also: `global-style-foundation` (next step), `styleguide-generator` (if #13 yes — scaffold after the foundation; with no existing blocks, the block library/component definition is created with it), `eds-migration-process` (full workflow this gates), `import-content-scoping` (URL triage for full-site scope), `excat-xwalk-expert` (if XWalk), `measure-then-implement` (Faithful means measure), `styling-additively` (the Frozen-Tools machinery the mutation bar feeds).

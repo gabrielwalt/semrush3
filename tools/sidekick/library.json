@@ -1,0 +1,18 @@
+{
+  "total": 11,
+  "offset": 0,
+  "limit": 11,
+  "data": [
+    { "name": "Insights Form", "path": "/library/blocks/insights-form" },
+    { "name": "Logos", "path": "/library/blocks/logos" },
+    { "name": "Teaser", "path": "/library/blocks/teaser" },
+    { "name": "Carousel", "path": "/library/blocks/carousel" },
+    { "name": "Stats", "path": "/library/blocks/stats" },
+    { "name": "Quote", "path": "/library/blocks/quote" },
+    { "name": "Pricing Nav", "path": "/library/blocks/pricing-nav" },
+    { "name": "Pricing Plans", "path": "/library/blocks/pricing-plans" },
+    { "name": "Comparison Table", "path": "/library/blocks/comparison-table" },
+    { "name": "Add-ons", "path": "/library/blocks/addons" },
+    { "name": "Accordion", "path": "/library/blocks/accordion" }
+  ]
+}
