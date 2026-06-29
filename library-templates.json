@@ -1,12 +1,8 @@
 {
-  "total": 5,
+  "total": 1,
   "offset": 0,
-  "limit": 5,
+  "limit": 1,
   "data": [
-    { "key": "Hero section", "value": "https://main--semrush3--gabrielwalt.aem.live/library/sections/hero" },
-    { "key": "Dark section", "value": "https://main--semrush3--gabrielwalt.aem.live/library/sections/dark" },
-    { "key": "Light section", "value": "https://main--semrush3--gabrielwalt.aem.live/library/sections/light" },
-    { "key": "Flush section", "value": "https://main--semrush3--gabrielwalt.aem.live/library/sections/flush" },
     { "key": "Pricing page", "value": "https://main--semrush3--gabrielwalt.aem.live/library/templates/pricing" }
   ]
 }
