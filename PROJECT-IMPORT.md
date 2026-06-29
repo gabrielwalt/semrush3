@@ -95,7 +95,7 @@ Wires the project's blocks into DA's in-editor **Library panel** so authors can 
 - **Agent-owned (in repo, done):**
   - `content/library/blocks/<block>.plain.html` — 11 dedicated **clean** demo pages, one instance per *real* variant (teaser+teaser-dark; carousel+carousel-articles+carousel-quotes; others single). NOT the styleguide pages — DA derives one author variant per block instance, so the styleguide's multi-story pages would leak bogus variants.
   - `block-library.json` (site root) — the blocks-list source: rows of `name` + `path` (→ `/library/blocks/<block>`). Maintain in lockstep with `PROJECT-BLOCKS.md` (Styleguide-Twins-The-Library Rule).
-- **User-owned (handoff — NOT done; agent can't write it):** add one row to the DA site config at `https://admin.da.live/config/gabrielwalt/semrush3/` (401-gated), sheet **`library`**: `title=Blocks`, `path=/block-library.json`, `ref=main`. Then **publish** `block-library.json` + the `content/library/**` pages so the panel can fetch them.
+- **User-owned (handoff — NOT done; agent can't write it):** in the DA config editor **`https://da.live/config#/gabrielwalt/semrush3/`** → **Add sheet** named **`library`** (the default `data` sheet is the wrong one) → row 1 headers `title`/`path`/`ref`, row 2 `Blocks`/`/block-library.json`/`main` → Save. Then **publish** `block-library.json` + the `content/library/**` pages so the panel can fetch them.
 
 ### EMA "Library url" (agent reuse substrate) — own-blocks library built 2026-06-28
 
